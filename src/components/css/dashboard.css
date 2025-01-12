@@ -1,0 +1,52 @@
+
+.topCard{
+
+    padding:12px;
+    border-radius: 12px;
+    background: rgb(240, 241, 244);
+    margin:9px;
+    display:'flex';
+    width:'fit-content';
+    height:3rem
+}
+
+
+._topCard{
+
+    padding:12px;
+    background: #FFFF;
+    margin:9px;
+    display:'flex';
+    width:'fit-content';
+    border: 1px solid lightgrey;
+    border-radius: 12px;
+}
+
+
+
+
+.__topCard{
+
+    padding:12px;
+    background: #FFFF;
+    margin:9px;
+    display:'flex';
+    width:16rem;
+    border: 1px solid lightgrey;
+    border-radius: 12px;
+}
+
+.___topCard{
+
+    /* padding:12px; */
+    background: #FFFF;
+   
+    display:'flex';
+    width:20rem;
+
+   
+}
+
+.jkl{
+    color:rgb(8, 54, 23)
+}
