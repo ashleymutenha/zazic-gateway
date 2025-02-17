@@ -24,8 +24,9 @@ import SiteAes from '../SiteAEs';
 import Card1 from './bodyComponents/Card1';
 import { TbRibbonHealth } from 'react-icons/tb';
 import { FaHandshakeSimple, FaKitMedical } from 'react-icons/fa6';
+import Header from './Header';
 
-export default function Site({district ,Details,facilities, selectedMonth, selectedYear, staticSites,_staticSite}){
+export default function Site({district ,Details,facilities, selectedMonth, selectedYear, staticSites,_staticSite, username}){
      console.log("details",Details)
 
      const [aePage,setAEs] =useState(false)
@@ -103,6 +104,7 @@ export default function Site({district ,Details,facilities, selectedMonth, selec
        return(
          <div>
              {showFacilities===false && aePage ===false?(<div >
+              <Header/>
             <div
                         style={{
                           background: "beige",
@@ -264,10 +266,10 @@ export default function Site({district ,Details,facilities, selectedMonth, selec
                      </div>
            </div>
           </div>):
-          showFacilities ===true && aePage ===false?(<Facilities district ={district} facilities={facilities} selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} _staticSite={_staticSite} />):
+          showFacilities ===true && aePage ===false?(<Facilities district ={district} facilities={facilities} selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} _staticSite={_staticSite} username ={username} />):
           showFacilities ===false && aePage ===true ?(<SiteAes district={district} facility={Details.facilityName}
              _staticSite={_staticSite} aes = {Details['matchingAES']} Details={Details}
-              selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} facilities={facilities}/>):null
+              selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} facilities={facilities} username ={username}/>):null
           }
           </div>
         );

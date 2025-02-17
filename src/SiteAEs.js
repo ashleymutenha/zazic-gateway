@@ -6,7 +6,8 @@ import { BiX } from "react-icons/bi"
 import TableAEs from "./components/bodyComponents/TableAEs"
 import { LuHospital } from "react-icons/lu"
 import { IoManOutline } from "react-icons/io5"
-export default function SiteAes({aes, district, facility,_staticSite,Details,facilities, selectedMonth, selectedYear, staticSites}){
+import Header from "./components/Header"
+export default function SiteAes({aes, district, facility,_staticSite,Details,facilities, selectedMonth, selectedYear, staticSites, username}){
     const ageGroupHeadings = ['VMMC Number', 'Client Age', 'MC Method', 'Date AE Reported', 'AE Classification', 'AE Code', 'Circumcising Cadre', 'AE Management']
 
     const [showSite, setShowSite] = useState(false)
@@ -17,6 +18,7 @@ export default function SiteAes({aes, district, facility,_staticSite,Details,fac
              {showSite===false?
 
              <div>
+              <Header/>
 
                   <div
                                         style={{
@@ -54,7 +56,7 @@ export default function SiteAes({aes, district, facility,_staticSite,Details,fac
                                               </div>
 
                                              <div style ={{margin:25}}>   <TableAEs  headings = {ageGroupHeadings} rowElements={aes}/></div>
-                                            </div>:<Site staticSites={staticSites} Details={Details} district={district} selectedMonth={selectedMonth} selectedYear={selectedYear} facilities={facilities} _staticSite={_staticSite}/>}
+                                            </div>:<Site staticSites={staticSites} Details={Details} district={district} selectedMonth={selectedMonth} selectedYear={selectedYear} facilities={facilities} _staticSite={_staticSite} username ={username}/>}
 
 
         </div>

@@ -31,7 +31,7 @@ function Header(){
 
            {width>1000?<div style ={{display:'flex',flex:6, padding:"18px"}}>
             <div style ={{flex:6}}>
-            <div style ={{textAlign:'left', fontWeight:"bold", fontSize:25, color:'lightgrey'}}>ZAZIC Data Portal</div>
+            <div style ={{textAlign:'left', fontWeight:"bold", fontSize:25, color:'lightgrey'}}>ZAZIC Data Portal </div>
             </div>
 
 

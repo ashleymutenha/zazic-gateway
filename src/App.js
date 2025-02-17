@@ -1,26 +1,28 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
-import { useEffect } from 'react';
 import Header from './components/Header';
-import Site from './components/Site';
 import Body from './components/Body';
-import LoginCard from './components/Login'
-import { gapi } from 'gapi-script';
+import LoginCard from './components/Login';
+
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Login status
+  const [userEmail, setUserEmail] = useState(null); // Store user's email
 
-  const clientId = "221447692001-8ffn4d1tuomjg1b0hep8v6k01gptp2pa.apps.googleusercontent.com";
+  const handleLogin = (status, email = null) => {
+    setIsLoggedIn(status); // Update login status
+    if (status) {
+      setUserEmail(email); // Store email on successful login
+    }
+  };
 
-  // useEffect(()=>{
-  //     gapi.client.init({
-  //       clientId:clientId
-  //     })
-  // })
   return (
     <div className="App">
-     <Header/>
-     {/* <Body/> */}
-
-     <LoginCard/>
+      {/* <Header /> */}
+      {!isLoggedIn ? (
+        <LoginCard onLogin={handleLogin} loginStatus={true} />
+      ) : (
+        <Body email={userEmail} /> // Pass email as a prop to Body
+      )}
     </div>
   );
 }

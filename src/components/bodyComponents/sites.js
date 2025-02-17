@@ -151,7 +151,44 @@ export  const sites =[
         
     ], 
          "partner":"ZICHIRE"
-    }
+    },
+
+    {"district":"MBERENGWA",
+      "staticSite":"MUSUME - 101157 - MISSION HOSPITAL",
+      "facilities":[{
+         "facility":"Guruve District Hospital",
+         "type":"static"
+      },
+
+      {
+          "facility":"Bakasa Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Birkdale Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Bvochoro Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Camcasa Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Chipuriro",
+          "type":"outreach"
+       },
+
+      
+  ], 
+       "partner":"ZICHIRE"
+  }
 ]
 
 
@@ -184,7 +221,7 @@ export const partnerDistricts = [
 
 ]
 
-const districtByPartner =[
+export const districtByPartner =[
    {
       "district":"GOKWE SOUTH",
       "partner":"ZACH"
@@ -197,12 +234,6 @@ const districtByPartner =[
 
    {
       "district":"LUPANE",
-      "partner":"ZACH"
-   },
-
-
-   {
-      "district":"GOKWE SOUTH",
       "partner":"ZACH"
    },
 
@@ -222,10 +253,42 @@ const districtByPartner =[
    },
 
    {
-      "district":"MBIRE",
+      "district":"ZAKA",
       "partner":"ZACH"
-   }
+   },
 
+{
+   "district":"MATOBO",
+   "partner":"ZICHIRE"
+},
+{
+   "district":"GOROMONZI",
+   "partner":"ZICHIRE"
+},
 
+{
+   "district":"CHEGUTU",
+   "partner":"ZICHIRE"
+},
+
+{
+   "district":"SANYATI",
+   "partner":"ZICHIRE"
+},
+
+{
+   "district":"MHONDORO",
+   "partner":"ZICHIRE"
+},
+
+{
+   "district":"GURUVE",
+   "partner":"ZICHIRE"
+},
+
+{
+   "district":"GOROMONZI",
+   "partner":"ZICHIRE"
+}
 
 ]

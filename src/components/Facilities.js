@@ -5,8 +5,9 @@ import Dashboard from "./Dashboard";
 import Site from "./Site";
 import StaticSites from "./StaticSites";
 import { FaClinicMedical } from "react-icons/fa";
+import Header from "./Header";
 
-export default function Facilities({ staticSites,district, facilities, selectedMonth, selectedYear,_staticSite }) {
+export default function Facilities({ staticSites,district, facilities, selectedMonth, selectedYear,_staticSite, username }) {
   // const [showDashboard, setShowDashboard] = useState(false);
   const [showFacility, setShowFacility] = useState(false);
   const [selectedFacility, setFacility] = useState({})
@@ -14,12 +15,41 @@ export default function Facilities({ staticSites,district, facilities, selectedM
   const [showStaticSites, setStatic] = useState(false)
   // Filter facilities by the selected period
   const filterByPeriod = () => {
-    return facilities.filter(
-      (facility) =>
-        String(facility.recordingMonth).toLowerCase() === String(selectedMonth).toLowerCase() &&
-        String(facility.year).toLowerCase() === String(selectedYear).toLowerCase()
-    );
+    return facilities
+      .filter(
+        (facility) =>
+          String(facility.recordingMonth).toLowerCase() === String(selectedMonth).toLowerCase() &&
+          String(facility.year).toLowerCase() === String(selectedYear).toLowerCase()
+      )
+     
   };
+  
+  const checkOccurence =(element,array)=>{
+    let count =0
+    for(var i of array){
+      if(i.facilityName == element.facilityName){
+        count+=1
+      }
+    }
+    return count
+  }
+
+  const allSites =()=>{
+    let sites =[]
+    for(var site of filterByPeriod()){
+      if(checkOccurence(site,sites)==0){
+        sites.push(site)
+      }
+    }
+    return sites
+  }
+
+
+  console.log("facilities",filterByPeriod())
+
+ 
+
+ 
 
   const totalMCs = () => {
     let sum = 0;
@@ -106,6 +136,8 @@ export default function Facilities({ staticSites,district, facilities, selectedM
     <div>
       {showStaticSites === false && showFacility === false ? (
         <div>
+          <Header/>
+        <div>
           {/* Toggle Dashboard Button */}
           <div
             style={{
@@ -120,6 +152,27 @@ export default function Facilities({ staticSites,district, facilities, selectedM
             }}
           >
             <BiX size={35} />
+          </div>
+
+
+           {/* Header Section */}
+           <div style={{ display: "flex", marginBottom: "1rem" }}>
+            <div className="topCard" style={{ flex: 9 }}>
+              <div style={{ display: "flex", marginTop: "10px" }}>
+                <BiSolidCompass size={45} color="rgb(51, 103, 96)" />
+                <div
+                  style={{
+                    fontSize: 18,
+                    color: "rgb(83, 94, 83)",
+                    fontWeight: "bold",
+                    marginLeft: "10px",
+                  }}
+                >
+                  {district} DISTRICT {'>'} {_staticSite} {'>'} Facilities
+                </div>
+              </div>
+            </div>
+            <div style={{ flex: 7 }}></div>
           </div>
 
           {/* Total MCs and Total Facilities Reporting */}
@@ -145,25 +198,7 @@ export default function Facilities({ staticSites,district, facilities, selectedM
             </div>
           </div>
 
-          {/* Header Section */}
-          <div style={{ display: "flex", marginBottom: "1rem" }}>
-            <div className="topCard" style={{ flex: 9 }}>
-              <div style={{ display: "flex", marginTop: "10px" }}>
-                <BiSolidCompass size={45} color="rgb(51, 103, 96)" />
-                <div
-                  style={{
-                    fontSize: 18,
-                    color: "rgb(83, 94, 83)",
-                    fontWeight: "bold",
-                    marginLeft: "10px",
-                  }}
-                >
-                  {district} DISTRICT {'>'} {_staticSite} {'>'} Facilities
-                </div>
-              </div>
-            </div>
-            <div style={{ flex: 7 }}></div>
-          </div>
+         
 
           {/* Facility Cards Section */}
           <div
@@ -174,17 +209,17 @@ export default function Facilities({ staticSites,district, facilities, selectedM
               gap: "1rem",
             }}
           >
-            {filterByPeriod().map((facility) => (
+            {allSites().map((facility) => (
               <FacilityCard key={facility.facility} facility={facility} />
             ))}
           </div>
-        </div>
+        </div></div>
       ) : showStaticSites === true && showFacility === false ? (
          <StaticSites facilities={facilities} 
-               staticSites={staticSites} selectedMonth={selectedMonth} selectedYear={selectedYear} selectedDistrict={district}/>
+               staticSites={staticSites} selectedMonth={selectedMonth} selectedYear={selectedYear} selectedDistrict={district} username ={username}/>
 
       ) : showFacility === true && showStaticSites === false ? (
-        <Site staticSites={staticSites} Details={selectedFacility} district={district} selectedMonth={selectedMonth} selectedYear={selectedYear} facilities={facilities} _staticSite={_staticSite}/>
+        <Site staticSites={staticSites} Details={selectedFacility} district={district} selectedMonth={selectedMonth} selectedYear={selectedYear} facilities={facilities} _staticSite={_staticSite} username ={username}/>
       ) : null}
     </div>
   );
