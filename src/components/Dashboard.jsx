@@ -211,7 +211,7 @@ const loggedUser = () =>{
 
 
   const aes = () => {
-    return mcs.reduce((totalAES, mc) => {
+    return getUniqueSites().reduce((totalAES, mc) => {
       const isMatchingMonthYear = mc['recordingMonth'] === selectedMonth && mc['year'] === selectedYear;
   
       if (
@@ -226,7 +226,7 @@ const loggedUser = () =>{
   };
 
   const aesBYDistrict = (district) => {
-    return mcs.reduce((totalAES, mc) => {
+    return getUniqueSites().reduce((totalAES, mc) => {
       const isMatchingMonthYear = mc['recordingMonth'] === selectedMonth && mc['year'] === selectedYear;
   
       if (
@@ -248,7 +248,7 @@ const loggedUser = () =>{
              mc["sgDisposable45-49"] + mc["sgDisposable50"];
     };
   
-    return mcs.reduce((sum, mc) => {
+    return getUniqueSites().reduce((sum, mc) => {
       const isMatchingMonthYear = mc['recordingMonth'] === selectedMonth && mc['year'] === selectedYear;
   
       if (userPriviledge === 'partner' && mc['Partner'] === userDomain && isMatchingMonthYear) {
@@ -273,7 +273,7 @@ const staticSiteReportRate =(district)=>{
       mc["sgReusable35-39"]+mc["sgReusable40-44"]+mc["sgReusable45-49"]+mc["sgReusable50"]
     }
 
-    return mcs.reduce((sum,mc)=>{
+    return getUniqueSites().reduce((sum,mc)=>{
       const isMatchingMonthYear = mc['recordingMonth'] === selectedMonth && mc['year'] === selectedYear;
 
       if (userPriviledge === 'partner' && mc['Partner'] === userDomain && isMatchingMonthYear) {
@@ -296,7 +296,7 @@ const staticSiteReportRate =(district)=>{
     }
     
 
-    return mcs.reduce((sum,mc)=>{
+    return getUniqueSites().reduce((sum,mc)=>{
       const isMatchingMonthYear =  mc['recordingMonth'] === selectedMonth && mc['year'] === selectedYear;
       if (userPriviledge === 'partner' && mc['Partner'] === userDomain && isMatchingMonthYear) {
         return sum + calculateSum(mc);
@@ -458,7 +458,7 @@ const checkOccurenceinArray =(array, element)=>{
   };
   
   const hivPositive = () => {
-    return mcs.reduce((sum, mc) => {
+    return getUniqueSites().reduce((sum, mc) => {
       const isMatchingMonthYear =
         mc["recordingMonth"] === selectedMonth && mc["year"] === selectedYear;
   
@@ -474,7 +474,7 @@ const checkOccurenceinArray =(array, element)=>{
   };
   
   const hivNegative = () => {
-    return mcs.reduce((sum, mc) => {
+    return getUniqueSites().reduce((sum, mc) => {
       const isMatchingMonthYear =
         mc["recordingMonth"] === selectedMonth && mc["year"] === selectedYear;
   
@@ -511,7 +511,7 @@ const checkOccurenceinArray =(array, element)=>{
 
   const getTotalFollowUp =()=>{
     let total =0
-    for(var mc of mcs){
+    for(var mc of getUniqueSites()){
       if(userPriviledge =='partner'){
         if(mc['Partner']==userDomain){
       if(mc['recordingMonth']==selectedMonth && mc['year']==selectedYear){
