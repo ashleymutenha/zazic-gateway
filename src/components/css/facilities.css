@@ -1,0 +1,25 @@
+.topCard{
+
+    padding:12px;
+    border-radius: 12px;
+    background: rgb(240, 241, 244);
+    margin:9px;
+    display:'flex';
+    width:'fit-content';
+    height:3rem
+}
+
+._topCard{
+
+    padding:8px;
+    border-radius: 12px;
+    background: rgb(240, 241, 244);
+    margin:9px;
+    display:'flex';
+    width:'fit-content';
+    height:3rem
+}
+
+.nm{
+    background: rgb(239, 237, 237);
+}

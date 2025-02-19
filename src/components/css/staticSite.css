@@ -1,0 +1,10 @@
+.react-tabs__tab {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Optional: Set padding inside the tabs */
+  .react-tabs__tab > h4 {
+    margin: 0;
+    padding: 5px 10px; /* Adjust padding as needed */
+  }
