@@ -421,13 +421,13 @@ const checkOccurenceinArray =(array, element)=>{
  return count
 }
   const handleFacilitiesSelection = (district) => {
-    const facilities = mcs.filter(
+    const facilities = getUniqueSites().filter(
       (item) =>
         String(item.District).toLowerCase() === String(district).toLowerCase() &&
         String(item.year) === String(selectedYear) &&
         String(item.recordingMonth).toLowerCase() === String(selectedMonth).toLowerCase()
     );
-    
+    console.log("facilities",facilities)
     setDistrictSites(facilities);
     setSelectedDistrict(district);
     setStaticSites(true);
