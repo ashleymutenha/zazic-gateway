@@ -20,11 +20,15 @@ import ProgressBar from "./bodyComponents/ProgressBar";
 import { sites} from "./bodyComponents/sites";
 import CustomChart from "./bodyComponents/Chart";
 import CustomChart2 from "./bodyComponents/Chart2";
+import { GrTools } from "react-icons/gr";
 
 export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username}){
   const[selectedSite, setSite] = useState("")
   const [showFacilities, setShowFacilities] = useState(false)
   const [showDashboard, setShowDashboard] = useState(false)
+
+    const [shownSection , setShownSection] = useState('mcMethod')
+  
 
   const getDistrictStaticSites = () => 
     sites.filter(site => site.district === selectedDistrict).length;
@@ -256,6 +260,7 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
     {showFacilities===false && showDashboard==false ?(<div>
       <Header />
 
+<div style ={{display:"flex"}}>
        <div
                   style={{
                     padding: "12px",
@@ -263,6 +268,8 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
                     width: "fit-content",
                     margin: "30px",
                     cursor: "pointer",
+                    flex:1,
+                    height:'fit-content'
                   }}
                   onClick={() => {
                     setShowDashboard(true);
@@ -271,9 +278,9 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
                   <BiArrowBack size={35} />
                 </div>
 
-                 {/* Header Section */}
-                 <div style={{ display: "flex", marginBottom: "1rem" }}>
-                  <div className="topCard" style={{ flex: 5 }}>
+
+                <div style={{ display: "flex", margin: "30px", flex:7}}>
+                  <div className="topCard" style={{ flex:9 }}>
                     <div style={{ display: "flex", marginTop: "10px" }}>
                       <RiHospitalFill size={45} color="rgb(51, 103, 96)" />
                       <div
@@ -288,13 +295,28 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
                       </div>
                     </div>
                   </div>
+
+                  <div style ={{flex:8}}>
+
+                  </div>
+                  
                   <div style={{ flex: 7 }}></div>
                 </div> 
+
+                </div>
+
+                 {/* Header Section */}
+                 
+                
 
               
                 
 
-                  <div style={{ display: "flex", marginTop: "20px" }}>
+                           
+
+<div style ={{display:"flex", borderTop:"1px solid lightgrey"}}>
+<div style ={{flex:7}}>
+<div style={{ display: "flex", marginTop: "20px" }}>
                             <div className="_topCard" style={{ flex: 1 }}>
                               <div style={{ padding: "12px", borderBottom: "1px solid lightgrey" }}>
                                 <BsSunFill size={30} color="rgb(39, 126, 157)" />
@@ -325,9 +347,8 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
                               </div>
                               <div style={{ fontSize: "23px", color: "rgb(39, 126, 157)", fontWeight:"bold"}}>{StaticSites.length}</div>
                             </div>
-                          </div>
+                          </div> 
 
-<div style ={{display:"flex", borderTop:"1px solid lightgrey"}}>
 <div style ={{display:"flex", flex:12}}>
      {staticSites.map((site)=>(
 
@@ -428,11 +449,36 @@ style={{
 
 </div>
      ))}
-        </div>
+        </div></div>
+         <div style ={{flex:7, borderLeft:"1px solid lightgrey"}}>
 
-        <div style ={{flex:8, borderLeft:"1px solid lightgrey", padding:"12px"}}>
+            <div style ={{display:'flex', margin:5}}>
+          
+                      <div style ={{padding:10, background:"rgb(12, 80, 36)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+                      onClick={()=>{
+                        setShownSection('mcMethod')
+                      }}
+                      >MC Method <GrTools size ={23}/></div>
+                      <div style ={{padding:10, background:"rgb(35, 53, 41)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+          
+                      onClick={()=>{
+                        setShownSection('HTS')
+                      }}
+                      
+                      >HTS <TbRibbonHealth size ={23}/></div>
+                      <div style ={{padding:10, background:"rgb(12, 97, 110)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+          
+                        onClick={()=>{
+                          setShownSection('aes')
+                        }}
+                      
+                      >AE(s) <FiAlertTriangle size ={23}/></div>
+          
+          
+                     </div>
+        <div style ={{padding:"12px"}}>
 
-          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px"}}>
+        {shownSection =='mcMethod' && shownSection!='HTS' && shownSection!='aes'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px"}}>
                       <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                           <PiStrategyThin size ={45} color ="navy" style ={{flex:3}}/>  <div style ={{marginLeft:"23px", flex:8, fontSize:"18px"}}>MCs By Method</div>
                       </div>
@@ -467,9 +513,9 @@ style={{
 />
           
           
-                    </div>
+                    </div>:null}
 
-                     <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                    {shownSection =='HTS' && shownSection!='mcMethod' && shownSection!= 'aes'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
                                 <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                                     <TbRibbonHealth size ={45} color ="red" style ={{flex:3}}/>  <div style ={{marginLeft:"23px", flex:8, fontSize:"18px"}}>HIV Testing Statistics</div>
                                 </div>
@@ -502,7 +548,7 @@ style={{
 />
                     
                     
-                              </div>
+                              </div>:null}
 
 
                               <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
@@ -525,7 +571,7 @@ style={{
                                         </div>
 
 
-        </div>
+        </div></div>
         
         </div>
     </div>):

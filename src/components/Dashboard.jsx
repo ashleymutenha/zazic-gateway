@@ -8,10 +8,10 @@ import Card1 from './bodyComponents/Card1';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { PiPlusCircle, PiStrategyThin } from 'react-icons/pi';
 import { FaCalculator, FaCut, FaHospitalUser, FaRing } from 'react-icons/fa';
-import { FaRecycle } from 'react-icons/fa6';
+import { FaRecycle, FaRibbon } from 'react-icons/fa6';
 import { TbRibbonHealth } from 'react-icons/tb';
 import Header from './Header';
-import { GiUncertainty } from 'react-icons/gi';
+import { GiRibbon, GiUncertainty } from 'react-icons/gi';
 
 import Card from './bodyComponents/Card';
 import { SlUserFollowing } from 'react-icons/sl';
@@ -23,6 +23,8 @@ import App from '../App';
 import CustomChart from './bodyComponents/Chart';
 import CustomChart2 from './bodyComponents/Chart2';
 import { users } from './appresources/users';
+import { GrTools } from 'react-icons/gr';
+import { IoRibbon } from 'react-icons/io5';
 
 
 
@@ -36,6 +38,7 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
   const [districtSites, setDistrictSites] = useState([]);
   const [userPriviledge, setUserPriviledges] = useState([])
   const [userDomain, setUserDomain] = useState([])
+  const [shownSection , setShownSection] = useState('mcMethod')
   
 
   const [showLoginPage, setLogin] =useState(false)
@@ -724,12 +727,37 @@ const checkOccurenceinArray =(array, element)=>{
             ))}
           </div>
         </div>
-
+         
         <div style={{flex:5, padding:"10px", borderLeft:"1px solid lightgrey", height:'3450px'}}>
 
           <Card1 value ={aes()} title={"Adverse Events"} icon = {<FiAlertTriangle size ={30} color ="red"/>} textColor="rgb(11, 74, 96)"/>
+          
+           <div style ={{display:'flex', margin:5}}>
 
-          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px"}}>
+            <div style ={{padding:10, background:"rgb(12, 80, 36)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+            onClick={()=>{
+              setShownSection('mcMethod')
+            }}
+            >MC Method <GrTools size ={23}/></div>
+            <div style ={{padding:10, background:"rgb(35, 53, 41)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+
+            onClick={()=>{
+              setShownSection('HTS')
+            }}
+            
+            >HTS <TbRibbonHealth size ={23}/></div>
+            <div style ={{padding:10, background:"rgb(12, 97, 110)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
+
+              onClick={()=>{
+                setShownSection('aes')
+              }}
+            
+            >AE(s) <FiAlertTriangle size ={23}/></div>
+
+
+           </div>
+
+          {shownSection =='mcMethod' && shownSection!='HTS' && shownSection!='aes'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px"}}>
             <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                 <PiStrategyThin size ={45} color ="rgb(11, 74, 96)" style ={{flex:3}}/>  <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>MCs By Method</div>
             </div>
@@ -763,10 +791,10 @@ const checkOccurenceinArray =(array, element)=>{
 />
 
 
-          </div>
+          </div>:null}
 
           
-          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+          {shownSection =='HTS' && shownSection!='mcMethod' && shownSection!= 'aes'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
             <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                 <TbRibbonHealth size ={45} color ="red" style ={{flex:3}}/>  <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>HIV Testing Statistics</div>
             </div>
@@ -804,7 +832,7 @@ const checkOccurenceinArray =(array, element)=>{
 
 
 
-          </div>
+          </div>:null}
 
           <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
             <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex" , color:"darkgreen"}}>
