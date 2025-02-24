@@ -1,6 +1,7 @@
 
 
-export default function Card({icon,value,value2,title ,decoratorColor, decoratorTextColor, showDetailsBtn,showsecondValue, callBackFunction}){
+export default function Card({icon,value,value2,title ,decoratorColor,
+   decoratorTextColor, showDetailsBtn,showsecondValue, callBackFunction, titleIcon, title2}){
  
     return(
 
@@ -26,6 +27,7 @@ export default function Card({icon,value,value2,title ,decoratorColor, decorator
                                                 <div style={{ fontSize: 23, color: "rgb(83, 94, 83)", marginLeft: "10px" }}>
                                                  {title}
                                                 </div>
+
                                               </div>
                                               
                                               <div style ={{display:"flex", marginTop:"8px"}}>

@@ -5,24 +5,29 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
 import { BiCut, BiFolder, BiRecycle, BiSolidAmbulance, BiSun, BiTrash, BiX } from 'react-icons/bi';
-import Facilities from './Facilities';
-import TableComponent from './bodyComponents/Table';
-import SectionHeader from './bodyComponents/SectionHeader';
+import TableComponent from '../bodyComponents/Table';
+import SectionHeader from '../bodyComponents/SectionHeader';
 import {GiHealthNormal, GiMedicalPack, GiRibbon, GiUncertainty } from 'react-icons/gi';
-import Card from './bodyComponents/Card';
+import Card from '../bodyComponents/Card';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { TiTick } from 'react-icons/ti';
-import SiteAes from '../SiteAEs';
-import Card1 from './bodyComponents/Card1';
+
+import Card1 from '../bodyComponents/Card1';
 import { TbRibbonHealth } from 'react-icons/tb';
 import { FaHandshakeSimple, FaKitMedical } from 'react-icons/fa6';
-import Header from './Header';
+import Header from '../Header';
+import StaticSite from '../bodyComponents/StaticSite';
+import { useEffect } from 'react';
 
-export default function Site({district ,Details,facilities, selectedMonth, selectedYear, staticSites,_staticSite, username, districtSites}){
-     console.log("details",Details)
+export default function Facility({district ,Details,_staticSite, username, _selectedMonth, _selectedYear }){
 
-     const [aePage,setAEs] =useState(false)
-    const [showFacilities, setShowFacilities] = useState(false)
+
+    useEffect(()=>{
+        console.log("details",Details)
+    })
+
+
+    const [showStaticSite, setStaticSite] = useState(false)
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -95,7 +100,7 @@ export default function Site({district ,Details,facilities, selectedMonth, selec
 
        return(
          <div>
-             {showFacilities===false && aePage ===false?(<div >
+             {showStaticSite==false?(<div >
               <Header/>
             <div
                         style={{
@@ -106,7 +111,7 @@ export default function Site({district ,Details,facilities, selectedMonth, selec
                           cursor: "pointer",
                         }}
                         onClick={() => {
-                          setShowFacilities(true);
+                          setStaticSite(true);
                         }}
                       >
                         <BiX size={35} />
@@ -257,11 +262,8 @@ export default function Site({district ,Details,facilities, selectedMonth, selec
 
                      </div>
            </div>
-          </div>):
-          showFacilities ===true && aePage ===false?(<Facilities district ={district} facilities={facilities} selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} _staticSite={_staticSite} username ={username}  districtSites={districtSites}/>):
-          showFacilities ===false && aePage ===true ?(<SiteAes district={district} facility={Details.facilityName}
-             _staticSite={_staticSite} aes = {Details['matchingAES']} Details={Details}
-              selectedMonth={selectedMonth} selectedYear={selectedYear} staticSites={staticSites} facilities={facilities} username ={username}/>):null
+          </div>):<StaticSite username ={username} district={district} 
+          staticSite={_staticSite} _selectedMonth={_selectedMonth}  _selectedYear={_selectedYear}/>
           }
           </div>
         );

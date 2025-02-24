@@ -11,7 +11,7 @@ import { PiStrategyThin } from "react-icons/pi";
 import { BiTrash } from "react-icons/bi";
 import CustomChart from "./Chart";
 import { GoNumber } from "react-icons/go";
-
+import Facility from "../staticSiteComponents/Facility";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.css'; 
@@ -36,6 +36,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
     const [selectedYear, setSelectedYear] = useState('');
 
     const [shownSection, setShownSection] = useState('mc Method')
+    const [facility,setFacility] = useState()
+    const [showFacility, setShowFacility] = useState(false)
 
     const CustomTab = ({ children, ...otherProps }) => (
       <Tab {...otherProps} style ={{padding:0, margin:0}}>
@@ -79,6 +81,14 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
             }
   
             
+          
+          }
+
+          else{
+
+          
+              setSelectedMonth(_selectedMonth);
+              setSelectedYear(_selectedYear);
           
           }
          
@@ -133,8 +143,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
     
             }}
             onClick={() => {
-            //   setFacility(facility)
-            //   setShowFacility(true);
+            setFacility(facility)
+            setShowFacility(true)
             }}
           >
             <span style={{ fontSize: "16px", fontWeight: "500" }}>View Details</span>
@@ -356,8 +366,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
      
    
     return (
-
-        <div>
+      <div>
+         {showFacility===false?<div>
 
             <Header/>
 
@@ -561,6 +571,9 @@ onClick={()=>{
             ))}
           </div>
 
+        </div>:<Facility Details ={facility} district ={district} username={username} 
+        _staticSite={staticSite} _selectedMonth ={selectedMonth} _selectedYear={selectedYear}/>}
+        
         </div>
     )
 }

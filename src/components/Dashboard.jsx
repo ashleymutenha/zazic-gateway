@@ -25,6 +25,7 @@ import CustomChart2 from './bodyComponents/Chart2';
 import { users } from './appresources/users';
 import { GrTools } from 'react-icons/gr';
 import { IoRibbon } from 'react-icons/io5';
+import DistrictsNotSubmitted from './popupComponents/districtsNotSubmitted';
 
 
 
@@ -63,6 +64,8 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
         const cleanData = JSON.parse(rawData.replace(/\bNaN\b/g, 'null'));
 
         console.log("data",cleanData)
+
+       
         setMCs(cleanData);
 
         if (_selectedMonth != undefined && _selectedYear != undefined) {
@@ -88,7 +91,6 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
             setSelectedYear(today.getFullYear())
             setSelectedMonth(monthNames[today.getMonth()-1])
           }
-
           
         
         }
@@ -100,6 +102,8 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
     };
 
     fetchData()
+
+   
   }
    
  
@@ -334,6 +338,25 @@ const staticSiteReportRate =(district)=>{
     
     return districts;
  }
+
+
+ const getDistrictsNotReported = () => {
+  let districts = [];
+
+  for (let district of getPartnerDistrict()) {
+     
+     let count = getDistricts().filter(dist=>dist===district['district']).length
+      if (count== 0) { // Fixed the comparison operator
+          districts.push(district);
+      }
+  }
+
+  return districts;
+};
+
+
+
+
 
 
 
@@ -632,6 +655,7 @@ const checkOccurenceinArray =(array, element)=>{
               </div>
               <div style={{ fontWeight: 'bold', fontSize: 18, color: 'rgb(39, 126, 157)' }}>Total District(s) that have Reported</div>
 
+
               <div 
   style={{
     color: "rgb(39, 126, 157)",
@@ -663,9 +687,7 @@ const checkOccurenceinArray =(array, element)=>{
 
 
               <div style ={{marginTop:"12px"}}><ProgressBar bgcolor='rgb(29, 82, 99)' completed={districtSubmissionRate()} containerColor="rgb(232, 238, 240)" /></div>
-             { getDistricts() != getPartnerDistrict()? <div style ={{margin:8, padding:"12px",background:"rgb(13, 116, 150)", color:'#ffff', borderRadius:'12px'}}>
-             View District(s) that have not yet submitted
-        </div>:null}
+             { getDistricts() != getPartnerDistrict()? <DistrictsNotSubmitted districts={getDistrictsNotReported()} partnerDistrictTotal ={getPartnerDistrict().length}/>:null}
             </div>
           </div>
 
