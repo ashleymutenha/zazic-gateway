@@ -44,7 +44,7 @@ export default function DistrictsNotSubmitted({districts, partnerDistrictTotal})
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {districts.map((district, index) => (
           <div key={index} style={{ flex: "1 1 calc(33.33% - 10px)", boxSizing: "border-box" }}>
-            <Card icon={<BiMapPin  size ={23}/>} title={district.district} title2 ={districts.length/partnerDistrictTotal}/>
+            <Card icon={<BiMapPin  size ={27} color ={"purple"}/>} title={district.district} title2 ={districts.length/partnerDistrictTotal}/>
           </div>))}
           </div>)}
         
@@ -63,7 +63,7 @@ export default function DistrictsNotSubmitted({districts, partnerDistrictTotal})
         contentLabel="Example Modal"
     
       >
-        <button style ={{background:"rgb(56, 80, 62)", borderRadius:"50%", height:"60", width:"60"}}><CgClose style ={{color:"#ffff"}}  size ={30} onClick={closeModal}/></button>
+        <button style ={{background:"rgb(11, 94, 105)", border:"0px", height:"60", width:"60", padding:"12px"}}><CgClose style ={{color:"#ffff"}}  size ={30} onClick={closeModal}/></button>
         
         <div style ={{display:"flex"}}>
         <div >

@@ -24,7 +24,7 @@ export default function Card({icon,value,value2,title ,decoratorColor,
                                             >
                                               <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
                                                 {icon}
-                                                <div style={{ fontSize: 23, color: "rgb(83, 94, 83)", marginLeft: "10px" }}>
+                                                <div style={{ fontSize: 23, color: "rgb(21, 55, 21)", marginLeft: "10px" }}>
                                                  {title}
                                                 </div>
 
