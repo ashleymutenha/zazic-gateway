@@ -857,7 +857,7 @@ const checkOccurenceinArray =(array, element)=>{
         
         </div></div>)
        : (
-        <StaticSites facilities={districtSites} 
+        <StaticSites facilities={districtSites} districtSites={districtSites}
         staticSites={getStaticSites()} selectedMonth={selectedMonth} selectedYear={selectedYear} selectedDistrict={selectedDistrict} username ={username}/>
        )
         

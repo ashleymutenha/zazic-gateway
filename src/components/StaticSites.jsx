@@ -22,7 +22,7 @@ import CustomChart from "./bodyComponents/Chart";
 import CustomChart2 from "./bodyComponents/Chart2";
 import { GrTools } from "react-icons/gr";
 
-export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username}){
+export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username, districtSites}){
   const[selectedSite, setSite] = useState("")
   const [showFacilities, setShowFacilities] = useState(false)
   const [showDashboard, setShowDashboard] = useState(false)
@@ -357,7 +357,7 @@ className="__topCard"
 style={{
   flex: "1 1 300px",
   maxWidth: "300px",
-  marginLeft: "6rem",
+  marginLeft: "2rem",
   marginTop: "2rem",
   padding: "1rem",
   backgroundColor: "#fff",
@@ -582,6 +582,7 @@ style={{
           selectedYear={selectedYear}
           staticSites={staticSites}
           _staticSite ={selectedSite}
+          districtSites={districtSites}
           username ={username}
 />):showFacilities===false && showDashboard===true ?(<Dashboard _selectedMonth={selectedMonth} _selectedYear={selectedYear} username ={username} />):null}
 </div>)

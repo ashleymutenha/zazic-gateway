@@ -80,6 +80,37 @@ export  const sites =[
        "partner":"ZACH"
   },
 
+
+  {"district":"MBERENGWA",
+   "staticSite":"MNENE - 101029 - MISSION HOSPITAL",
+   "facilities":[{
+      "facility":"Mnene Hospital",
+      "type":"static"
+   },
+
+   {
+       "facility":"Imbahuru Clinic",
+       "type":"outreach"
+    },
+
+    {
+       "facility":"Sandawana Clinic",
+       "type":"outreach"
+    },
+
+    {
+       "facility":"Chiedza Clinic",
+       "type":"outreach"
+    },
+
+    {
+       "facility":"Gaha Clinic",
+       "type":"outreach"
+    }
+],
+    "partner":"ZACH"
+},
+
     {"district":"MATOBO",
         "staticSite":"MAPHISA - 100890 - DISTRICT HOSPITAL",
         "facilities":[{
