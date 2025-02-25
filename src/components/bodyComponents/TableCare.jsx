@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 
-export default function TableAEs({headings, rowElements, district , site}){
+export default function TableCare({headings, rowElements}){
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -49,14 +49,9 @@ export default function TableAEs({headings, rowElements, district , site}){
               
                  <StyledTableCell>{element['district']}</StyledTableCell>
                  <StyledTableCell>{element['site']}</StyledTableCell>
-                <StyledTableCell>{element['vmmc_number']}</StyledTableCell>
-                <StyledTableCell>{element['client_age']}</StyledTableCell>
-                <StyledTableCell>{element['mcMethod']}</StyledTableCell>
-                <StyledTableCell>{element['date_ae_identified']}</StyledTableCell>
-                <StyledTableCell>{element['ae_classification']}</StyledTableCell>
-                <StyledTableCell>{element['ae_type_code']}</StyledTableCell>
-                <StyledTableCell>{element['circumcising_cadre']}</StyledTableCell>
-                <StyledTableCell>{element['aeComments']}</StyledTableCell>
+                <StyledTableCell>{element['hivPositive']}</StyledTableCell>
+                <StyledTableCell>{element['hivPositiveUC']}</StyledTableCell>
+                <StyledTableCell>{element['hivCare']}</StyledTableCell>
               </StyledTableRow>))}
           </TableBody>
         </Table>

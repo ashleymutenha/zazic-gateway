@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {BiMapPin, BiMinusCircle, BiSolidDashboard, BiTrash } from 'react-icons/bi';
+import {BiMale, BiMaleSign, BiMapPin, BiMinusCircle, BiSolidDashboard, BiTrash } from 'react-icons/bi';
 import {  BsFillGeoFill, BsGlobe,  BsSun } from 'react-icons/bs';
 import Select from 'react-select';
 import './css/dashboard.css';
@@ -26,6 +26,7 @@ import { users } from './appresources/users';
 import { GrTools } from 'react-icons/gr';
 import { IoRibbon } from 'react-icons/io5';
 import DistrictsNotSubmitted from './popupComponents/districtsNotSubmitted';
+import TableAEs from './bodyComponents/TableAEs';
 
 
 
@@ -43,6 +44,9 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
   
 
   const [showLoginPage, setLogin] =useState(false)
+
+  const ageGroupHeadings = ['District','Site','VMMC Number', 'Client Age', 'MC Method', 'Date AE Reported', 'AE Classification', 'AE Code', 'Circumcising Cadre', 'AE Management']
+
   
   // const login = useGoogleLogin({
   //   onSuccess: tokenResponse => console.log(tokenResponse),
@@ -231,6 +235,20 @@ const loggedUser = () =>{
       return totalAES;
     }, 0);
   };
+
+  const _aes =()=>{
+    let aes =[]
+    for(let mc of getUniqueSites() ){
+      if(mc['recordingMonth'] ==selectedMonth && mc['year']==selectedYear){
+        mc['matchingAES'].map((ae)=>{
+          ae.district = mc['District']
+          ae.site = mc['facilityName']
+          aes.push(ae)
+        })
+      }
+    }
+   return aes
+  }
 
   const aesBYDistrict = (district) => {
     return getUniqueSites().reduce((totalAES, mc) => {
@@ -750,7 +768,7 @@ const checkOccurenceinArray =(array, element)=>{
           </div>
         </div>
          
-        <div style={{flex:5, padding:"10px", borderLeft:"1px solid lightgrey", height:'3450px'}}>
+        <div style={{flex:6, padding:"10px", borderLeft:"1px solid lightgrey", height:'3450px'}}>
 
           <Card1 value ={aes()} title={"Adverse Events"} icon = {<FiAlertTriangle size ={30} color ="red"/>} textColor="rgb(11, 74, 96)"/>
           
@@ -772,6 +790,7 @@ const checkOccurenceinArray =(array, element)=>{
 
               onClick={()=>{
                 setShownSection('aes')
+               
               }}
             
             >AE(s) <FiAlertTriangle size ={23}/></div>
@@ -855,6 +874,19 @@ const checkOccurenceinArray =(array, element)=>{
 
 
           </div>:null}
+
+          {shownSection ==='aes'&&shownSection!=='HTS' && shownSection!=='mcMethod'?
+
+<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+<div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+    <BiMale size ={45} color ="green" style ={{flex:1}}/>  <FiAlertTriangle size ={45} color ="red" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Adverse Events</div>
+</div>    
+        <div style ={{marginTop:"10px"}}>
+          <TableAEs rowElements ={_aes()} headings={ageGroupHeadings} />
+          </div>
+          </div>:null}
+          
+        
 
           <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
             <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex" , color:"darkgreen"}}>

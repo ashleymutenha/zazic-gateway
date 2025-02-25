@@ -3,7 +3,7 @@ import {  GiUncertainty } from "react-icons/gi";
 import { RiHospitalFill } from "react-icons/ri";
 import { useState } from "react";
 import Facilities from "./Facilities";
-import { BiArrowBack, BiMinusCircle, BiTrash} from "react-icons/bi";
+import { BiArrowBack, BiMale, BiMinusCircle, BiTrash} from "react-icons/bi";
 import Dashboard from "./Dashboard";
 import {  BsSunFill } from "react-icons/bs";
 import Card from "./bodyComponents/Card";
@@ -21,6 +21,7 @@ import { sites} from "./bodyComponents/sites";
 import CustomChart from "./bodyComponents/Chart";
 import CustomChart2 from "./bodyComponents/Chart2";
 import { GrTools } from "react-icons/gr";
+import TableAEs from "./bodyComponents/TableAEs";
 
 export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username, districtSites}){
   const[selectedSite, setSite] = useState("")
@@ -28,6 +29,9 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
   const [showDashboard, setShowDashboard] = useState(false)
 
     const [shownSection , setShownSection] = useState('mcMethod')
+
+    const ageGroupHeadings = ['District','Site','VMMC Number', 'Client Age', 'MC Method', 'Date AE Reported', 'AE Classification', 'AE Code', 'Circumcising Cadre', 'AE Management']
+
   
 
   const getDistrictStaticSites = () => 
@@ -251,6 +255,20 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
 
   // getOutreach
 
+
+  const _aes =()=>{
+    let aes =[]
+    for(let mc of facilities ){
+      if(mc['recordingMonth'] ==selectedMonth && mc['year']==selectedYear){
+        mc['matchingAES'].map((ae)=>{
+          ae.district = mc['District']
+          ae.site = mc['facilityName']
+          aes.push(ae)
+        })
+      }
+    }
+   return aes
+  }
 
   
 
@@ -549,6 +567,17 @@ style={{
                     
                     
                               </div>:null}
+
+                                {shownSection ==='aes'&&shownSection!=='HTS' && shownSection!=='mcMethod'?
+                              
+                              <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                              <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                  <BiMale size ={45} color ="green" style ={{flex:1}}/>  <FiAlertTriangle size ={45} color ="red" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Adverse Events</div>
+                              </div>    
+                                      <div style ={{marginTop:"10px"}}>
+                                        <TableAEs rowElements ={_aes()} headings={ageGroupHeadings} />
+                                        </div>
+                                        </div>:null}
 
 
                               <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>

@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Select from "react-dropdown-select";
 import { BsCollection, BsHospital } from "react-icons/bs";
-import { FaBookMedical, FaClinicMedical, FaCut, FaHospitalUser, FaRibbon, FaRing } from "react-icons/fa";
-import { GiMedicalPack, GiMedicalThermometer } from "react-icons/gi";
+import { FaBookMedical, FaClinicMedical, FaCut, FaHandshake, FaHospitalUser, FaRibbon, FaRing } from "react-icons/fa";
+import { GiMedicalDrip, GiMedicalPack, GiMedicalThermometer } from "react-icons/gi";
 import Card1 from "./Card1";
 import { FiAlertTriangle } from "react-icons/fi";
 import { PiStrategyThin } from "react-icons/pi";
-import { BiTrash } from "react-icons/bi";
+import { BiBookmark, BiInjection, BiMale, BiTrash } from "react-icons/bi";
 import CustomChart from "./Chart";
 import { GoNumber } from "react-icons/go";
 import Facility from "../staticSiteComponents/Facility";
@@ -24,7 +24,12 @@ import Card from "./Card";
 import { SlUserFollowing } from "react-icons/sl";
 import HTS from "../staticSiteComponents/HTS";
 import { RiToolsLine } from "react-icons/ri";
-import { MdMedicalServices } from "react-icons/md";
+import { MdMedicalServices, MdMedicationLiquid } from "react-icons/md";
+import TableAEs from "./TableAEs";
+import { CiMedicalMask } from "react-icons/ci";
+import { IoIosMedical } from "react-icons/io";
+import TablePreP from "./TablePreP";
+import TableCare from "./TableCare";
 // Import default styles
 
 
@@ -39,12 +44,16 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
     const [facility,setFacility] = useState()
     const [showFacility, setShowFacility] = useState(false)
 
+    const [linkagesShownSection , setLinkageSection] = useState('prep')
+
     const CustomTab = ({ children, ...otherProps }) => (
       <Tab {...otherProps} style ={{padding:0, margin:0}}>
         <h4>{children}</h4>
       </Tab>
     );
    
+    const ageGroupHeadings = ['District','Site','VMMC Number', 'Client Age', 'MC Method', 'Date AE Reported', 'AE Classification', 'AE Code', 'Circumcising Cadre', 'AE Management']
+
 
     useEffect( ()=>{
 
@@ -100,6 +109,108 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
   
       fetchData()
     },[])
+
+
+    const _aes =()=>{
+      let aes =[]
+      for(let mc of filteredFacilites() ){
+        if(mc['recordingMonth'] ==selectedMonth && mc['year']==selectedYear){
+          mc['matchingAES'].map((ae)=>{
+            ae.district = mc['District']
+            ae.site = mc['facilityName']
+            aes.push(ae)
+          })
+        }
+      }
+     return aes
+    }
+
+
+    const hivPositiveByFacility =(facility)=>{
+      let sum =0
+      
+          const calculateSum = (mc) => {
+              return mc["hivPositive15-19"] + mc["hivPositive20-24"] + mc["hivPositive25-29"] +
+                     mc["hivPositive30-34"] + mc["hivPositive35-39"] + mc["hivPositive40-44"] +
+                     mc["hivPositive45-49"] + mc["hivPositive50"];
+            };
+      
+   filteredFacilites().map((mc)=>{
+         if(mc['facilityName'] ==facility){
+          sum +=calculateSum(mc);
+         } 
+      },0)
+      return sum
+    }
+
+    const hivPositiveNCByFacility =(facility)=>{
+      let sum =0
+      
+          const calculateSum = (mc) => {
+              return mc["hivPositiveNC15-19"] + mc["hivPositiveNC20-24"] + mc["hivPositiveNC25-29"] +
+                     mc["hivPositiveNC30-34"] + mc["hivPositiveNC35-39"] + mc["hivPositiveNC40-44"] +
+                     mc["hivPositiveNC45-49"] + mc["hivPositiveNC50"]
+            };
+      
+   filteredFacilites().map((mc)=>{
+         if(mc['facilityName'] ==facility){
+          sum +=calculateSum(mc);
+         } 
+      },0)
+      return sum
+    }
+
+    const hivNegativeByFacility =(facility)=>{
+      let sum =0
+      const calculateSum = (mc) => {
+          return mc["hivNegative15-19"] + mc["hivNegative20-24"] + mc["hivNegative25-29"] +
+                 mc["hivNegative30-34"] + mc["hivNegative35-39"] + mc["hivNegative40-44"] +
+                 mc["hivNegative45-49"] + mc["hivNegative50"];
+        };
+      
+      filteredFacilites().map((mc)=>{
+         if(mc['facilityName']==facility){
+          sum +=calculateSum(mc);
+         }
+      },0)
+      return sum
+    }
+
+    const prep =()=>{
+        let array =[]
+
+        for(let mc of filteredFacilites()){
+          let object ={
+            'district':mc['District'],
+            'site':mc['facilityName'],
+            'hivNegative':hivNegativeByFacility(mc['facilityName']),
+            'hivPreP':mc['total_hiv_negative_linked_to_prep']
+          }
+
+          array.push(object)
+        }
+      return array
+    }
+
+    const care =()=>{
+      let array =[]
+
+      for(let mc of filteredFacilites()){
+        let object ={
+          'district':mc['District'],
+          'site':mc['facilityName'],
+          'hivPositive':hivPositiveByFacility(mc['facilityName']),
+          'hivPositiveUC':hivPositiveNCByFacility(mc['facilityName']),
+          'hivCare':mc['total_hiv_positive_linked_to_care']
+        }
+
+        array.push(object)
+      }
+    return array
+  }
+
+
+
 
 
      const FacilityCard = ({ facility }) => (
@@ -281,7 +392,7 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
 
       };
 
-
+    
 
 
     const surgicalReusable =()=>{
@@ -486,6 +597,15 @@ onClick={()=>{
       <div style ={{background:"rgb(54, 75, 64)", padding:'12px', color:'#ffff'}}
 
 onClick={()=>{
+  setShownSection('linkages')
+}}
+      
+      >Linkages & Referrals <FaHandshake size ={20}/></div>
+
+
+<div style ={{background:"rgb(19, 90, 53)", padding:'12px', color:'#ffff'}}
+
+onClick={()=>{
   setShownSection('aes')
 }}
       
@@ -495,7 +615,7 @@ onClick={()=>{
       <CustomTab style ={{marginLeft:0}}></CustomTab>
     </TabList>
     <TabPanel>
-    {shownSection ==='mc Method' && shownSection !=='HTS' && shownSection!=='aes'?<div> <div style = {{flex:8, padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", margin:6}}>
+    {shownSection ==='mc Method' && shownSection !=='HTS' && shownSection!=='aes' && shownSection!='linkages'?<div> <div style = {{flex:8, padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", margin:6}}>
                         <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                             <RiToolsLine size ={45} color ="rgb(11, 74, 96)" style ={{flex:1}}/> <MdMedicalServices size ={45} color ="rgb(20, 61, 22)" style ={{flex:1 ,margin:0}}/>   <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>MCs By Method</div>
                         </div>
@@ -534,12 +654,82 @@ onClick={()=>{
   borderColors={['rgb(26, 86, 54)', 'rgb(42, 120, 127)', 'rgb(207, 209, 226)']} 
   charttype={"bar"} 
 />
-                        </div></div>:shownSection ==='HTS' && shownSection!=='mcMethod' && shownSection!=='aes'?
+                        </div></div>:shownSection ==='HTS' && shownSection!=='mcMethod' && shownSection!=='aes' && shownSection!='linkages'?
                         <div>
                          <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
                          <TbRibbonHealth size ={45} color ="rgb(214, 15, 15)" style ={{flex:3}}/>  <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>HIV Testing Statistics</div>
                      </div>
-                        <HTS facilities={filteredFacilites()} totalMCs={totalMCs()}/></div>:null
+                        <HTS facilities={filteredFacilites()} totalMCs={totalMCs()}/></div>:
+                        shownSection ==='aes'&&shownSection!=='HTS' && shownSection!=='mcMethod' && shownSection!='linkages'?
+                                                      
+                                                      <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                      <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                          <BiMale size ={45} color ="green" style ={{flex:1}}/>  <FiAlertTriangle size ={45} color ="red" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Adverse Events</div>
+                                                      </div>    
+                                                              <div style ={{marginTop:"10px"}}>
+                                                                <TableAEs rowElements ={_aes()} headings={ageGroupHeadings} />
+                                                                </div>
+                                                                </div>:<div>
+
+                                                                <div style ={{display:"flex"}}>
+        <div style ={{background:"rgb(206, 218, 206)", padding:'12px', color:'black', cursor:"pointer"}}
+        onClick={()=>{
+          setLinkageSection('prep')
+        }}
+        >Linkage to PreP <GiMedicalDrip size ={20}/></div>
+      <div style ={{background:"rgb(199, 214, 213)", padding:'12px', color:'black', cursor:"pointer"}}
+
+onClick={()=>{
+  setLinkageSection('care')
+}}
+      
+      >Linkage to Care  <BiInjection size ={20}/></div>
+      <div style ={{background:"rgb(166, 177, 172)", padding:'12px', color:'black', cursor:"pointer"}}
+
+onClick={()=>{
+  setLinkageSection('other')
+}}
+      
+      >Referral to Other Services  <FaHandshake size ={20}/></div>
+
+
+<div style ={{background:"rgb(222, 231, 227)", padding:'12px', color:'black', cursor:"pointer"}}
+
+onClick={()=>{
+  setLinkageSection('sti')
+}}
+      
+      >Referral to STI Services <FaClinicMedical size ={20}/></div>
+
+<div style ={{background:"rgb(208, 218, 214)", padding:'12px', color:'black', cursor:"pointer"}}
+
+onClick={()=>{
+  setLinkageSection('srh')
+}}
+      
+      >Referral to SRH Services <MdMedicationLiquid size ={20}/></div>
+
+
+      </div>
+  
+  {linkagesShownSection =='prep'&& linkagesShownSection!='care'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+  <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+        <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+  </div> 
+  <div style ={{marginTop:"12px"}}>
+      <TablePreP headings={['District','Site','HIV -ve MCs', 'Linkages to PreP']} rowElements={prep()}/></div>
+      </div>:linkagesShownSection =='care'&& linkagesShownSection!='prep'?
+
+<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+<div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+</div> 
+<div style ={{marginTop:"12px"}}>
+    <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+    </div>:null
+      
+    }
+                                                                </div>
                         
                       }
     </TabPanel>
