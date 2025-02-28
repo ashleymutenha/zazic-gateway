@@ -1,8 +1,8 @@
 import Header from "../Header"
 import { useEffect } from "react";
 import { useState } from "react";
-import Select from "react-dropdown-select";
-import { BsCollection, BsHospital } from "react-icons/bs";
+import Select from "react-select";
+import { BsCollection, BsFillGeoFill, BsHospital } from "react-icons/bs";
 import { FaBookMedical, FaClinicMedical, FaCut, FaHandshake, FaHospitalUser, FaRibbon, FaRing } from "react-icons/fa";
 import { GiMedicalDrip, GiMedicalPack, GiMedicalThermometer } from "react-icons/gi";
 import Card1 from "./Card1";
@@ -26,10 +26,14 @@ import HTS from "../staticSiteComponents/HTS";
 import { RiToolsLine } from "react-icons/ri";
 import { MdMedicalServices, MdMedicationLiquid } from "react-icons/md";
 import TableAEs from "./TableAEs";
-import { CiMedicalMask } from "react-icons/ci";
-import { IoIosMedical } from "react-icons/io";
+import { sites } from "./sites";
 import TablePreP from "./TablePreP";
 import TableCare from "./TableCare";
+import TableOther from "./TableOther";
+import TableSTI from "./TableSTI";
+import TableSRH from "./TableSRH";
+import ProgressBar from "./ProgressBar";
+import SitesNotSubmitted from "../popupComponents/sitesNotSubmitted";
 // Import default styles
 
 
@@ -208,8 +212,82 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
       }
     return array
   }
+ 
+
+  const otherServices =()=>{
+   let array =[]
+    for(let mc of filteredFacilites()){
+
+      mc.otherReferrals.map((referral)=>{
+        array.push(referral)
+      })
+    }
+    return array
+  }
 
 
+  const stiServices =()=>{
+    let array =[]
+    for(let mc of filteredFacilites()){
+      
+      let object ={
+        "district":mc['District'],
+        "site":mc['facilityName'],
+        "stiReferrals":mc['total_mcs_referred_for_sti_services']
+      }
+      array.push(object)  
+    }
+    return array
+  }
+
+
+  const srhServices =()=>{
+    let array =[]
+    for(let mc of filteredFacilites()){
+      
+      let object ={
+        "district":mc['District'],
+        "site":mc['facilityName'],
+        "stiReferrals":mc['total_mcs_referred_for_srh_services']
+      }
+      array.push(object)  
+    }
+    return array
+  }
+
+
+  const getFacilitiesByStatic =() =>{
+    let _facilities =[]
+     for(var site of sites){
+       if(site.staticSite ==staticSite){
+        for(var _site of site.facilities){
+          _facilities.push(_site)
+        }
+       }
+     }
+     return _facilities
+  }
+
+
+  const SiteReportingRate = ()=>{
+    return (filteredFacilites().length/getFacilitiesByStatic().length)*100
+  }
+
+
+  const getSitesNotReported = () => {
+    let districts = [];
+  
+    for (let district of filteredFacilites()) {
+       
+       let count = getFacilitiesByStatic().filter(site=>site['facilityName']===district['facilityName']).length
+        if (count== 0) { // Fixed the comparison operator
+            districts.push(district);
+        }
+    }
+  
+    return districts;
+  };
+  
 
 
 
@@ -321,7 +399,7 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
 
       const checkSelectedMonth = ()=>{
         let month =""
-        // if(_selectedMonth ==undefined){
+        if(_selectedMonth ==undefined){
           const monthNames = [
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -340,19 +418,17 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
             month = monthNames[today.getMonth()-1]
           }
     
-        // }
-        // else {
-        //   month = selectedMonth
-        // }
+        }
+        else {
+          month = selectedMonth
+        }
     
         return month
       }
-
-
-
+    
       const checkSelectedYear = ()=>{
         let year =0
-        // if(_selectedYear ==undefined){
+        if(_selectedYear ==undefined){
           const today = new Date()
     
          let currentyear = today.getFullYear()
@@ -365,10 +441,10 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
           year =currentyear
          }
     
-        // }
-        // else {
-        //   year = _selectedYear
-        // }
+        }
+        else {
+          year = _selectedYear
+        }
     
         return year
       }
@@ -506,20 +582,17 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
 
                                             <div style={{ flex: 5 }}>
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <Select
+              <Select
                   options={months}
                   defaultValue={months.find((m) => m.value === checkSelectedMonth())}
                   placeholder="Select Month"
-                  onChange={(option) =>{ 
-                    setSelectedMonth(option[0].value)
-                }}
+                  onChange={(option) => setSelectedMonth(option.value)}
                 />
                 <Select
                   options={years}
                   defaultValue={years.find((y) => y.value === checkSelectedYear())}
                   placeholder="Select Year"
-                  onChange={(option) => {
-                    setSelectedYear(option[0].value)}}
+                  onChange={(option) => setSelectedYear(option.value)}
                 />
               </div>
             </div></div>
@@ -553,7 +626,54 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
                           justifyContent: "center", // Centers horizontally
                         }}
                       >
-                        <FiAlertTriangle size ={30} color ="red"/></div>} textColor="rgb(11, 74, 96)"/></div>
+                        <FiAlertTriangle size ={30} color ="red"/></div>} textColor="rgb(11, 74, 96)"/>
+
+                      
+                        
+                        
+                        </div>
+
+                        <div className="_topCard" style={{ flex: 1, height:'fit-content' }}>
+              <div style={{ padding: '12px', borderBottom: '1px solid lightgrey' }}>
+                <BsFillGeoFill size={30} color="rgb(137, 166, 177)" />
+              </div>
+              <div style={{ fontWeight: 'bold', fontSize: 18, color: 'rgb(39, 126, 157)' }}>Total Facilities that have Reported</div>
+
+
+              <div 
+  style={{
+    color: "rgb(39, 126, 157)",
+    fontSize: "23px",
+    fontWeight: "bold",
+    display: "flex",
+    justifyContent: "center", // Center horizontally
+    alignItems: "center", // Center vertically
+    flexDirection: "row", // Ensure the children stay in a row
+  }}
+>
+  <div>
+    {filteredFacilites().length} {"/"} {getFacilitiesByStatic().length}
+  </div>
+  <div
+    style={{
+      marginLeft: "10px",
+      background: "rgb(236, 248, 207)",
+      padding: "5px",
+      borderRadius: "12px",
+      color: "black",
+      fontSize:"20px"
+    }}
+  >
+    {SiteReportingRate().toFixed(0)} {"%"}
+  </div>
+</div>
+
+
+
+              <div style ={{marginTop:"12px"}}><ProgressBar bgcolor='rgb(29, 82, 99)' completed={SiteReportingRate()} containerColor="rgb(232, 238, 240)" /></div>
+              <SitesNotSubmitted sites ={getSitesNotReported()}/>
+             {/* { getDistricts() != getPartnerDistrict()? <DistrictsNotSubmitted districts={getDistrictsNotReported()} partnerDistrictTotal ={getPartnerDistrict().length}/>:null} */}
+            </div>
 
 
                         <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
@@ -712,13 +832,15 @@ onClick={()=>{
 
       </div>
   
-  {linkagesShownSection =='prep'&& linkagesShownSection!='care'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+  {linkagesShownSection =='prep'&& linkagesShownSection!='care' && linkagesShownSection!='other' && 
+  linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
   <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
         <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
   </div> 
   <div style ={{marginTop:"12px"}}>
       <TablePreP headings={['District','Site','HIV -ve MCs', 'Linkages to PreP']} rowElements={prep()}/></div>
-      </div>:linkagesShownSection =='care'&& linkagesShownSection!='prep'?
+      </div>:linkagesShownSection =='care'&& linkagesShownSection!='prep' && linkagesShownSection !='other' && 
+      linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
 
 <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
 <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
@@ -726,6 +848,34 @@ onClick={()=>{
 </div> 
 <div style ={{marginTop:"12px"}}>
     <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+    </div>:linkagesShownSection =='other'&& linkagesShownSection!='care' && 
+    linkagesShownSection !='prep' && linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
+
+<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+<div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to Other Services</div>
+</div> 
+<div style ={{marginTop:"12px"}}>
+    <TableOther headings={['District','Site','Service Referred','Reason']} rowElements={otherServices()}/></div>
+    </div>:linkagesShownSection =='sti'&& linkagesShownSection!='care' && linkagesShownSection !='prep' && 
+    linkagesShownSection !='other' &&  linkagesShownSection !='srh'
+    ?
+
+<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+<div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to STI Services</div>
+</div> 
+<div style ={{marginTop:"12px"}}>
+    <TableSTI headings={['District','Site','Total Referrals to STI Services']} rowElements={stiServices()}/></div>
+    </div>:linkagesShownSection =='srh'&& linkagesShownSection!='care' && linkagesShownSection !='prep' && 
+    linkagesShownSection !='other' &&  linkagesShownSection !='sti'?
+
+    <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+<div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to SRH Services</div>
+</div> 
+<div style ={{marginTop:"12px"}}>
+    <TableSRH headings={['District','Site','Total Referrals to SRH Services']} rowElements={srhServices()}/></div>
     </div>:null
       
     }

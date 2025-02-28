@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BiArrowBack, BiDiamond, BiMinusCircle, BiSolidAlbum, BiSolidCompass, BiTrash, BiX } from "react-icons/bi";
+import { BiArrowBack, BiBookmark, BiDiamond, BiInjection, BiMale, BiMinusCircle, BiSolidAlbum, BiSolidCompass, BiTrash, BiX } from "react-icons/bi";
 import { BsBack, BsBackspace, BsCollection, BsFillEyeFill, BsHospital, BsSunFill, BsSymmetryVertical } from "react-icons/bs";
 import Dashboard from "./Dashboard";
 import Site from "./Site";
@@ -8,15 +8,22 @@ import { FaClinicMedical, FaCut } from "react-icons/fa";
 import Header from "./Header";
 import { SlUserFollowing } from "react-icons/sl";
 import Card from "./bodyComponents/Card";
-import { FaHospitalUser, FaRecycle, FaRing } from "react-icons/fa6";
+import { FaHandshake, FaHospitalUser, FaRecycle, FaRing } from "react-icons/fa6";
 import CustomChart2 from "./bodyComponents/Chart2";
-import { GiUncertainty } from "react-icons/gi";
+import { GiMedicalDrip, GiUncertainty } from "react-icons/gi";
 import Card1 from "./bodyComponents/Card1";
 import { PiPlusCircle, PiStrategyThin } from "react-icons/pi";
 import { TbRibbonHealth } from "react-icons/tb";
 import { FiAlertTriangle } from "react-icons/fi";
 import { GrTools } from "react-icons/gr";
 import CustomChart from "./bodyComponents/Chart";
+import { MdMedicationLiquid } from "react-icons/md";
+import TablePreP from "./bodyComponents/TablePreP";
+import TableCare from "./bodyComponents/TableCare";
+import TableOther from "./bodyComponents/TableOther";
+import TableSTI from "./bodyComponents/TableSTI";
+import TableSRH from "./bodyComponents/TableSRH";
+import TableAEs from "./bodyComponents/TableAEs";
 
 export default function Facilities({ staticSites,district, facilities, selectedMonth, selectedYear,_staticSite, username, districtSites }) {
   // const [showDashboard, setShowDashboard] = useState(false);
@@ -27,6 +34,12 @@ export default function Facilities({ staticSites,district, facilities, selectedM
 
 
   const [showStaticSites, setStatic] = useState(false)
+
+  const ageGroupHeadings = ['District','Site','VMMC Number', 'Client Age', 'MC Method', 'Date AE Reported', 'AE Classification', 'AE Code', 'Circumcising Cadre', 'AE Management']
+
+
+  const [linkagesShownSection , setLinkageSection] = useState('prep')
+
   // Filter facilities by the selected period
   const filterByPeriod = () => {
     return facilities
@@ -268,6 +281,147 @@ const surgicalReusable =()=>{
     </div>
   );
 
+
+  const prep =()=>{
+    let array =[]
+
+    for(let mc of facilities){
+      let object ={
+        'district':mc['District'],
+        'site':mc['facilityName'],
+        'hivNegative':hivNegativeByFacility(mc['facilityName']),
+        'hivPreP':mc['total_hiv_negative_linked_to_prep']
+      }
+
+      array.push(object)
+    }
+  return array
+}
+
+const care =()=>{
+  let array =[]
+
+  for(let mc of facilities){
+    let object ={
+      'district':mc['District'],
+      'site':mc['facilityName'],
+      'hivPositive':hivPositiveByFacility(mc['facilityName']),
+      'hivPositiveUC':hivPositiveNCByFacility(mc['facilityName']),
+      'hivCare':mc['total_hiv_positive_linked_to_care']
+    }
+
+    array.push(object)
+  }
+return array
+}
+
+
+const otherServices =()=>{
+let array =[]
+for(let mc of facilities){
+
+  mc.otherReferrals.map((referral)=>{
+    array.push(referral)
+  })
+}
+return array
+}
+
+
+const stiServices =()=>{
+let array =[]
+for(let mc of facilities){
+  
+  let object ={
+    "district":mc['District'],
+    "site":mc['facilityName'],
+    "stiReferrals":mc['total_mcs_referred_for_sti_services']
+  }
+  array.push(object)  
+}
+return array
+}
+
+
+const srhServices =()=>{
+let array =[]
+for(let mc of facilities){
+  
+  let object ={
+    "district":mc['District'],
+    "site":mc['facilityName'],
+    "stiReferrals":mc['total_mcs_referred_for_srh_services']
+  }
+  array.push(object)  
+}
+return array
+}
+
+
+        const hivPositiveByFacility =(facility)=>{
+          let sum =0
+          
+              const calculateSum = (mc) => {
+                  return mc["hivPositive15-19"] + mc["hivPositive20-24"] + mc["hivPositive25-29"] +
+                        mc["hivPositive30-34"] + mc["hivPositive35-39"] + mc["hivPositive40-44"] +
+                        mc["hivPositive45-49"] + mc["hivPositive50"];
+                };
+          
+        facilities.map((mc)=>{
+            if(mc['facilityName'] ==facility){
+              sum +=calculateSum(mc);
+            } 
+          },0)
+          return sum
+        }
+
+        const hivPositiveNCByFacility =(facility)=>{
+          let sum =0
+          
+              const calculateSum = (mc) => {
+                  return mc["hivPositiveNC15-19"] + mc["hivPositiveNC20-24"] + mc["hivPositiveNC25-29"] +
+                        mc["hivPositiveNC30-34"] + mc["hivPositiveNC35-39"] + mc["hivPositiveNC40-44"] +
+                        mc["hivPositiveNC45-49"] + mc["hivPositiveNC50"]
+                };
+          
+        facilities.map((mc)=>{
+            if(mc['facilityName'] ==facility){
+              sum +=calculateSum(mc);
+            } 
+          },0)
+          return sum
+        }
+
+        const hivNegativeByFacility =(facility)=>{
+          let sum =0
+          const calculateSum = (mc) => {
+              return mc["hivNegative15-19"] + mc["hivNegative20-24"] + mc["hivNegative25-29"] +
+                    mc["hivNegative30-34"] + mc["hivNegative35-39"] + mc["hivNegative40-44"] +
+                    mc["hivNegative45-49"] + mc["hivNegative50"];
+            };
+          
+          facilities.map((mc)=>{
+            if(mc['facilityName']==facility){
+              sum +=calculateSum(mc);
+            }
+          },0)
+          return sum
+        }
+
+        const _aes =()=>{
+          let aes =[]
+          for(let mc of facilities ){
+            if(mc['recordingMonth'] ==selectedMonth && mc['year']==selectedYear){
+              mc['matchingAES'].map((ae)=>{
+                ae.district = mc['District']
+                ae.site = mc['facilityName']
+                aes.push(ae)
+              })
+            }
+          }
+         return aes
+        }
+
   return (
     <div>
       {showStaticSites === false && showFacility === false ? (
@@ -387,6 +541,15 @@ const surgicalReusable =()=>{
           }}
           
           >HTS <TbRibbonHealth size ={23}/></div>
+
+          <div style ={{background:"rgb(54, 75, 64)", padding:'12px', color:'#ffff'}}
+                                            
+                                            onClick={()=>{
+                                              setShownSection('linkages')
+                                            }}
+                                                  
+                                                  >Linkages & Referrals <FaHandshake size ={20}/></div>
+
           <div style ={{padding:10, background:"rgb(12, 97, 110)", color:"#ffff", width:'fit-content', cursor:'pointer'}}
 
             onClick={()=>{
@@ -470,6 +633,114 @@ charttype={"pie"}
         
         
                   </div>:null}
+
+
+                      {shownSection ==='aes'&&shownSection!=='HTS' && shownSection!=='mcMethod' && shownSection!='linkages'?
+                                                
+                                                <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                    <BiMale size ={45} color ="green" style ={{flex:1}}/>  <FiAlertTriangle size ={45} color ="red" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Adverse Events</div>
+                                                </div>    
+                                                        <div style ={{marginTop:"10px"}}>
+                                                          <TableAEs rowElements ={_aes()} headings={ageGroupHeadings} />
+                                                          </div>
+                                                          </div>:null}
+
+
+
+
+                  {shownSection ==='linkages'&&shownSection!=='HTS' && shownSection!=='mcMethod' && shownSection!=='aes'?<div>
+                                                                    
+                                                                                                                                    <div style ={{display:"flex"}}>
+                                                                            <div style ={{background:"rgb(206, 218, 206)", padding:'12px', color:'black', cursor:"pointer"}}
+                                                                            onClick={()=>{
+                                                                              setLinkageSection('prep')
+                                                                            }}
+                                                                            >Linkage to PreP <GiMedicalDrip size ={20}/></div>
+                                                                          <div style ={{background:"rgb(199, 214, 213)", padding:'12px', color:'black', cursor:"pointer"}}
+                                                                    
+                                                                    onClick={()=>{
+                                                                      setLinkageSection('care')
+                                                                    }}
+                                                                          
+                                                                          >Linkage to Care  <BiInjection size ={20}/></div>
+                                                                          <div style ={{background:"rgb(166, 177, 172)", padding:'12px', color:'black', cursor:"pointer"}}
+                                                                    
+                                                                    onClick={()=>{
+                                                                      setLinkageSection('other')
+                                                                    }}
+                                                                          
+                                                                          >Referral to Other Services  <FaHandshake size ={20}/></div>
+                                                                    
+                                                                    
+                                                                    <div style ={{background:"rgb(222, 231, 227)", padding:'12px', color:'black', cursor:"pointer"}}
+                                                                    
+                                                                    onClick={()=>{
+                                                                      setLinkageSection('sti')
+                                                                    }}
+                                                                          
+                                                                          >Referral to STI Services <FaClinicMedical size ={20}/></div>
+                                                                    
+                                                                    <div style ={{background:"rgb(208, 218, 214)", padding:'12px', color:'black', cursor:"pointer"}}
+                                                                    
+                                                                    onClick={()=>{
+                                                                      setLinkageSection('srh')
+                                                                    }}
+                                                                          
+                                                                          >Referral to SRH Services <MdMedicationLiquid size ={20}/></div>
+                                                                    
+                                                                    
+                                                                          </div>
+                                                          
+                                                                           {linkagesShownSection =='prep'&& linkagesShownSection!='care' && linkagesShownSection!='other' && 
+                                                                            linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?<div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                                            <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                                                  <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+                                                                            </div> 
+                                                                            <div style ={{marginTop:"12px"}}>
+                                                                                <TablePreP headings={['District','Site','HIV -ve MCs', 'Linkages to PreP']} rowElements={prep()}/></div>
+                                                                                </div>:linkagesShownSection =='care'&& linkagesShownSection!='prep' && linkagesShownSection !='other' && 
+                                                                                linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
+                                                                          
+                                                                          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                                          <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+                                                                          </div> 
+                                                                          <div style ={{marginTop:"12px"}}>
+                                                                              <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+                                                                              </div>:linkagesShownSection =='other'&& linkagesShownSection!='care' && 
+                                                                              linkagesShownSection !='prep' && linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
+                                                                          
+                                                                          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                                          <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to Other Services</div>
+                                                                          </div> 
+                                                                          <div style ={{marginTop:"12px"}}>
+                                                                              <TableOther headings={['District','Site','Service Referred','Reason']} rowElements={otherServices()}/></div>
+                                                                              </div>:linkagesShownSection =='sti'&& linkagesShownSection!='care' && linkagesShownSection !='prep' && 
+                                                                              linkagesShownSection !='other' &&  linkagesShownSection !='srh'
+                                                                              ?
+                                                                          
+                                                                          <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                                          <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to STI Services</div>
+                                                                          </div> 
+                                                                          <div style ={{marginTop:"12px"}}>
+                                                                              <TableSTI headings={['District','Site','Total Referrals to STI Services']} rowElements={stiServices()}/></div>
+                                                                              </div>:linkagesShownSection =='srh'&& linkagesShownSection!='care' && linkagesShownSection !='prep' && 
+                                                                              linkagesShownSection !='other' &&  linkagesShownSection !='sti'?
+                                                                          
+                                                                              <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
+                                                                          <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
+                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Referrals to SRH Services</div>
+                                                                          </div> 
+                                                                          <div style ={{marginTop:"12px"}}>
+                                                                              <TableSRH headings={['District','Site','Total Referrals to SRH Services']} rowElements={srhServices()}/></div>
+                                                                              </div>:null
+                                                                                
+                                                                              }
+                                                                          
+                                                                          </div>:null}
 
 
                   <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
