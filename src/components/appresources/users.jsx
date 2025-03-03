@@ -19,6 +19,16 @@ export const users  = [{
 },
 
 {
+    "username":"pamtapfuma112@gmail.com",
+    "userLevel":"super",
+    "domain":"ZICHIRE",
+    "userInfo":{
+        "firstname":"Tanaka",
+        "lastname":"Mutenha"
+    }
+},
+
+{
     "username":"thulanimutukudzi@gmail.com",
     "userLevel":"partner",
     "domain":"ZACH",
@@ -31,8 +41,8 @@ export const users  = [{
 {
  "username":"tonderaimandi82@gmail.com",
  "userLevel":"site",
- "staticSite":"MUSUME - 101157 - MISSION HOSPITAL",
- "District":"MBERENGWA"
+ "staticSite":"GURUVE - 100553 - DISTRICT HOSPITAL",
+ "District":"GURUVE"
 }
 
 
