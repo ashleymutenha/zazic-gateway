@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import Card1 from '../bodyComponents/Card1';
@@ -8,6 +8,11 @@ import Card from '../bodyComponents/Card';
 import { CgClose } from 'react-icons/cg';
 
 export default function SitesNotSubmitted({sites, sitesTotal}){
+
+
+  useEffect(()=>{
+    console.log("sites",sites)
+  })
 
     const customStyles = {
         content: {
@@ -44,7 +49,7 @@ export default function SitesNotSubmitted({sites, sitesTotal}){
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {sites.map((district, index) => (
           <div key={index} style={{ flex: "1 1 calc(33.33% - 10px)", boxSizing: "border-box" }}>
-            <Card icon={<BiMapPin  size ={27} color ={"purple"}/>} title={district.facilityName}/>
+            <Card icon={<BiMapPin  size ={27} color ={"purple"}/>} title={district.facility}/>
           </div>))}
           </div>)}
         

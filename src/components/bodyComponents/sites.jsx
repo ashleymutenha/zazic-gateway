@@ -183,6 +183,112 @@ export  const sites =[
     ], 
          "partner":"ZICHIRE"
     },
+    {"district":"HURUNGWE",
+      "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
+      "facilities":[{
+         "facility":"Karoi District Hospital",
+         "type":"static"
+      },
+
+      {
+          "facility":"Moy Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Nyamakate Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Makuti Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Mana pools Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Chirundu Clinic",
+          "type":"outreach"
+       },
+
+       {
+         "facility":"Helywin Clinic",
+         "type":"outreach"
+      },
+
+      {
+         "facility":"Karuru Clinic",
+         "type":"outreach"
+      },
+
+      {
+        "facility":"Zebra downs Clinic",
+        "type":"outreach"
+     },
+
+     {
+      "facility":"Nyangoma Clinic",
+      "type":"outreach"
+   },
+
+
+   {
+      "facility":"Kasimure Clinic",
+      "type":"outreach"
+   },
+
+   {
+      "facility":"Mobile",
+      "type":"outreach"
+   },
+  
+
+
+      
+  ], 
+       "partner":"ZACH"
+  },
+
+    {"district":"HURUNGWE",
+      "staticSite":"TENGWE - 101886 - CLINIC",
+      "facilities":[{
+         "facility":"Tengwe Clinic",
+         "type":"static"
+      },
+
+      {
+          "facility":"Chinhere clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Beagest Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Masikati Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Murambi Clinic",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Chivende clinic",
+          "type":"outreach"
+       },
+
+      
+  ], 
+       "partner":"ZICHIRE"
+  },
 
     {"district":"MBERENGWA",
       "staticSite":"MUSUME - 101157 - MISSION HOSPITAL",
@@ -320,6 +426,9 @@ export const districtByPartner =[
 {
    "district":"GOROMONZI",
    "partner":"ZICHIRE"
-}
+},
+
+
+
 
 ]

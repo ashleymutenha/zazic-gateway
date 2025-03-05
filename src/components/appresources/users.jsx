@@ -41,9 +41,24 @@ export const users  = [{
 {
  "username":"tonderaimandi82@gmail.com",
  "userLevel":"site",
- "staticSite":"GURUVE - 100553 - DISTRICT HOSPITAL",
- "District":"GURUVE"
+ "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
+ "District":"HURUNGWE"
 }
+,
+{
+    "username":"madziwachenai1@gmail.com",
+    "userLevel":"site",
+    "staticSite":"TENGWE - 101886 - CLINIC",
+    "District":"HURUNGWE"
+   },
+
+   {
+    "username":"mudikanichipo@gmail.com",
+    "userLevel":"site",
+    "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
+    "District":"HURUNGWE"
+   }
+
 
 
 ]

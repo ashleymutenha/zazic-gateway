@@ -104,6 +104,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
               setSelectedYear(_selectedYear);
           
           }
+
+
          
   
         } catch (error) {
@@ -112,6 +114,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
       };
   
       fetchData()
+
+
     },[])
 
 
@@ -265,6 +269,7 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
         }
        }
      }
+
      return _facilities
   }
 
@@ -273,20 +278,27 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
     return (filteredFacilites().length/getFacilitiesByStatic().length)*100
   }
 
-
   const getSitesNotReported = () => {
     let districts = [];
-  
-    for (let district of filteredFacilites()) {
-       
-       let count = getFacilitiesByStatic().filter(site=>site['facilityName']===district['facilityName']).length
-        if (count== 0) { // Fixed the comparison operator
+    for (let district of getFacilitiesByStatic()) {
+        // Normalize facility name: convert to lowercase and remove ' clinic' if present
+        let normalizedFacility = district['facility'].toLowerCase().replace(/\s+clinic$/, '');
+
+        let count = filteredFacilites().filter(site => {
+            let normalizedSiteName = site['facilityName'].toLowerCase().replace(/\s+clinic$/, '');
+            return normalizedSiteName === normalizedFacility;
+        }).length;
+        
+        if (count === 0) { 
             districts.push(district);
         }
     }
   
     return districts;
-  };
+};
+
+
+
   
 
 
@@ -371,6 +383,7 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
                 }
             }
         }
+
         return sites
       }
 
