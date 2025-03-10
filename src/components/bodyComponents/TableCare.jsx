@@ -50,7 +50,7 @@ export default function TableCare({headings, rowElements}){
                  <StyledTableCell>{element['district']}</StyledTableCell>
                  <StyledTableCell>{element['site']}</StyledTableCell>
                 <StyledTableCell>{element['hivPositive']}</StyledTableCell>
-                <StyledTableCell>{element['hivPositiveUC']}</StyledTableCell>
+                {/* <StyledTableCell>{element['hivPositiveUC']}</StyledTableCell> */}
                 <StyledTableCell>{element['hivCare']}</StyledTableCell>
               </StyledTableRow>))}
           </TableBody>

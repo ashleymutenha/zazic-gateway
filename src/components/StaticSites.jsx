@@ -1,11 +1,11 @@
 import { FaHandshake, FaHospitalUser,  FaRecycle, FaRing } from "react-icons/fa6";
 import {  GiMedicalDrip, GiUncertainty } from "react-icons/gi";
-import { RiHospitalFill } from "react-icons/ri";
+import { RiArrowLeftSLine, RiHospitalFill } from "react-icons/ri";
 import { useState } from "react";
 import Facilities from "./Facilities";
 import { BiArrowBack, BiBookmark, BiInjection, BiMale, BiMinusCircle, BiTrash} from "react-icons/bi";
 import Dashboard from "./Dashboard";
-import {  BsSunFill } from "react-icons/bs";
+import {  BsArrowLeftShort, BsArrowLeftSquareFill, BsBack, BsBoxArrowLeft, BsMagic, BsSunFill } from "react-icons/bs";
 import Card from "./bodyComponents/Card";
 import { FiAlertTriangle } from "react-icons/fi";
 import { FaCalculator, FaClinicMedical, FaCut, FaHospitalAlt } from "react-icons/fa";
@@ -29,7 +29,19 @@ import TableOther from "./bodyComponents/TableOther";
 import TableSTI from "./bodyComponents/TableSTI";
 import TableSRH from "./bodyComponents/TableSRH";
 
+import { useEffect } from "react";
+import StaticSitesNotSubmitted from "./popupComponents/staticSitesNotSubmitted";
+
 export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username, districtSites}){
+  
+
+  useEffect(()=>{
+
+    // console.log("staticSites",staticSites)
+  })
+  
+  
+  
   const[selectedSite, setSite] = useState("")
   const [showFacilities, setShowFacilities] = useState(false)
   const [showDashboard, setShowDashboard] = useState(false)
@@ -417,17 +429,33 @@ return array
         }
 
         const siteSubmissionRate = ()=>{
-          let sitesSubmitted = staticSites.length
-      
-          let districtStaticSites = getStaticSites().length
-      
-          let submissionRate = sitesSubmitted/districtStaticSites *100
-      
-          return submissionRate
+          return (staticSites.length / getStaticSites().length)*100
         }
 
+
+        const checkCountofStaticSite =(staticSite) =>{
+         let count = 0
+          for(let site of staticSites){
+           if(site ==staticSite){
+            count+=1
+           }
+          }
+        return count
+        }
         
 
+        
+const staticSitesNotSubmitted =()=>{
+
+  let staticSites  = []
+
+  for(let site of getStaticSites()){
+    if(checkCountofStaticSite(site) ==0){
+      staticSites.push(site)
+    }
+  }
+ return staticSites
+}
 
   
 
@@ -441,18 +469,24 @@ return array
        <div
                   style={{
                     padding: "12px",
-                    background: "beige",
+                    background: "rgb(240, 241, 244)",
                     width: "fit-content",
                     margin: "30px",
                     cursor: "pointer",
-                    flex:1,
-                    height:'fit-content'
+                    // flex:1,
+                    height:'fit-content',
+                    borderRadius:"12px",
+                    marginTop:"35px"
                   }}
                   onClick={() => {
                     setShowDashboard(true);
                   }}
                 >
-                  <BiArrowBack size={35} />
+                  <div style ={{display:"flex"}}>
+                  <BsMagic style ={{marginLeft:"0", color:"rgb(17, 103, 157)"}} size ={20}/>
+                 
+                  <BsBoxArrowLeft size={40}  color ="rgb(51, 103, 96)" style ={{marginLeft:"19px"}}/>
+                  </div>
                 </div>
 
 
@@ -468,7 +502,7 @@ return array
                           marginLeft: "10px",
                         }}
                       >
-                       {selectedDistrict} {'>'} Static Sites
+                       {selectedDistrict} {'>'} STATIC SITES
                       </div>
                     </div>
                   </div>
@@ -494,7 +528,7 @@ return array
 <div style ={{display:"flex", borderTop:"1px solid lightgrey"}}>
 <div style ={{flex:7}}>
 <div style={{ display: "flex", marginTop: "20px" }}>
-                            <div className="_topCard" style={{ flex: 1 }}>
+                            <div className="_topCard" style={{ flex: 1 , height:'fit-content' }}>
                               <div style={{ padding: "12px", borderBottom: "1px solid lightgrey" }}>
                                 <BsSunFill size={30} color="rgb(39, 126, 157)" />
                               </div>
@@ -504,7 +538,7 @@ return array
                               <div style={{ fontSize: "23px", color: "rgb(39, 126, 157)", fontWeight:"bold"}}>{totalMCs()}</div>
                             </div>
 
-                            <div className="_topCard" style={{ flex: 1 }}>
+                            <div className="_topCard" style={{ flex: 1, height:'fit-content' }}>
                               <div style={{ padding: "12px", borderBottom: "1px solid lightgrey" }}>
                               <FiAlertTriangle size ={30} color ="red"/>
                               </div>
@@ -524,7 +558,7 @@ return array
                               </div>
 
                               <div style ={{display:"flex", marginTop:"10px"}}>
-                              <div style={{ fontSize: "23px", color: "rgb(39, 126, 157)", fontWeight:"bold", flex:6 }}>{StaticSites.length} / {getStaticSites().length}</div>
+                              <div style={{ fontSize: "23px", color: "rgb(39, 126, 157)", fontWeight:"bold", flex:6 }}>{staticSites.length} / {getStaticSites().length}</div>
 
                               <div
     style={{
@@ -542,9 +576,20 @@ return array
                               </div>
 
                               <ProgressBar bgcolor='rgb(29, 82, 99)' completed={siteSubmissionRate()} containerColor="rgb(232, 238, 240)" />
+
+                              <StaticSitesNotSubmitted sites ={staticSitesNotSubmitted()}/>
+                              
+
+
                             </div>
                           </div> 
 
+
+ <div style={{ margin: '20px', marginBottom:"10px", display: 'flex', alignItems: 'center',background:"#ececec", width:'fit-content', paddingRight:"4px" }}>
+            <FaHospitalAlt size={30} color="#FFFF" style={{ marginRight: '10px', background: 'rgb(8, 75, 62)', padding: '14px' }} />
+            <div style={{ fontSize: 34,display:"flex"  }}> <div>STATIC SITES</div>
+            </div>
+          </div>
 <div style ={{display:"flex", flex:12}}>
      {staticSites.map((site)=>(
 

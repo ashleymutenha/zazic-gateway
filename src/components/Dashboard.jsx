@@ -494,7 +494,7 @@ const checkOccurenceinArray =(array, element)=>{
     'July', 'August', 'September', 'October', 'November', 'December'
   ].map((month) => ({ value: month, label: month }));
 
-  const years = Array.from({ length: 7 }, (_, i) => 2024 + i).map((year) => ({ value: year, label: year }));
+  const years = Array.from({ length: 7 }, (_, i) => 2025 + i).map((year) => ({ value: year, label: year }));
 
   const calculateSum = (mc, type) => {
     // Dynamically calculate based on the type (hivPositive or hivNegative)
@@ -1085,10 +1085,10 @@ return array
                 
                 <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
                 <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
-                      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+                      <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to Care</div>
                 </div> 
                 <div style ={{marginTop:"12px"}}>
-                    <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+                    <TableCare headings={['District','Site','HIV +ve MCs', 'Linkages to Care']} rowElements={care()}/></div>
                     </div>:linkagesShownSection =='other'&& linkagesShownSection!='care' && 
                     linkagesShownSection !='prep' && linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
                 

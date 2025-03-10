@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BiArrowBack, BiBookmark, BiDiamond, BiInjection, BiMale, BiMinusCircle, BiSolidAlbum, BiSolidCompass, BiTrash, BiX } from "react-icons/bi";
-import { BsBack, BsBackspace, BsCollection, BsFillEyeFill, BsHospital, BsSunFill, BsSymmetryVertical } from "react-icons/bs";
+import { BsBack, BsBackspace, BsBoxArrowLeft, BsCollection, BsFillEyeFill, BsHospital, BsMagic, BsSunFill, BsSymmetryVertical } from "react-icons/bs";
 import Dashboard from "./Dashboard";
 import Site from "./Site";
 import StaticSites from "./StaticSites";
@@ -24,6 +24,9 @@ import TableOther from "./bodyComponents/TableOther";
 import TableSTI from "./bodyComponents/TableSTI";
 import TableSRH from "./bodyComponents/TableSRH";
 import TableAEs from "./bodyComponents/TableAEs";
+import ProgressBar from "./bodyComponents/ProgressBar";
+
+import { sites } from "./bodyComponents/sites";
 
 export default function Facilities({ staticSites,district, facilities, selectedMonth, selectedYear,_staticSite, username, districtSites }) {
   // const [showDashboard, setShowDashboard] = useState(false);
@@ -422,6 +425,25 @@ return array
          return aes
         }
 
+        const getSitesByStaticSite = () =>{
+
+          let facilities =[]
+
+          for(let site of sites){
+            if(site.staticSite ==_staticSite){
+              for(let facility of site.facilities){
+                facilities.push(facility)
+              }
+            }
+          }
+        
+       return facilities
+        }
+
+       const  facilityReportingRate =()=>{
+        return (facilities.length/getSitesByStaticSite().length)*100
+       }
+
   return (
     <div>
       {showStaticSites === false && showFacility === false ? (
@@ -429,24 +451,35 @@ return array
           <Header/>
         <div>
           {/* Toggle Dashboard Button */}
+         
+
+        <div style ={{display:"flex"}}>
           <div
-            style={{
-              padding: "12px",
-              background: "beige",
-              width: "fit-content",
-              margin: "12px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setStatic(true);
-            }}
-          >
-            <BiArrowBack size={35} />
-          </div>
+                            style={{
+                              padding: "12px",
+                              background: "rgb(240, 241, 244)",
+                              width: "fit-content",
+                              margin: "30px",
+                              cursor: "pointer",
+                              // flex:1,
+                              height:'fit-content',
+                              borderRadius:"12px",
+                              marginTop:"35px"
+                            }}
+                            onClick={() => {
+                              setStatic(true);
+                            }}
+                          >
+                            <div style ={{display:"flex"}}>
+                            <BsMagic style ={{marginLeft:"0", color:"rgb(17, 103, 157)"}} size ={20}/>
+                           
+                            <BsBoxArrowLeft size={40}  color ="rgb(51, 103, 96)" style ={{marginLeft:"19px"}}/>
+                            </div>
+                          </div>
 
 
            {/* Header Section */}
-           <div style={{ display: "flex", marginBottom: "1rem" }}>
+           <div style={{ display: "flex", marginBottom: "1rem", flex:9, marginTop:"30px" }}>
             <div className="topCard" style={{ flex: 9 }}>
               <div style={{ display: "flex", marginTop: "10px" }}>
                 <BiSolidCompass size={45} color="rgb(51, 103, 96)" />
@@ -458,12 +491,12 @@ return array
                     marginLeft: "10px",
                   }}
                 >
-                  {district} DISTRICT {'>'} {_staticSite} {'>'} Facilities
+                  {district} DISTRICT {'>'} {_staticSite} {'>'} FACILITIES
                 </div>
               </div>
             </div>
             <div style={{ flex: 7 }}></div>
-          </div>
+          </div></div>
 
           {/* Total MCs and Total Facilities Reporting */}
           <div style ={{display:"flex", borderTop:"1px solid lightgrey", padding :"0px"}}>
@@ -486,7 +519,25 @@ return array
               <div style={{ fontWeight: "bold", fontSize: 18, color: "rgb(11, 129, 54)" }}>
                 Facility Reporting Rate
               </div>
-              <div style={{ fontSize: 23, color: "black" }}>{facilities.length}</div>
+              <div style ={{display:'flex', padding:10}}> 
+              <div style={{ fontSize: 23, color: "black" }}>{facilities.length} /{getSitesByStaticSite().length} </div>
+
+              <div
+    style={{
+      marginLeft: "70px",
+      background: "rgb(210, 226, 216)",
+      padding: "5px",
+      borderRadius: "12px",
+      color: "black",
+      fontSize:"20px"
+    }}
+  >
+    {facilityReportingRate().toFixed(0)} {"%"}
+  </div>
+              </div>
+
+              <ProgressBar bgcolor='rgb(29, 82, 99)' completed={facilityReportingRate()} containerColor="rgb(232, 238, 240)" />
+
             </div>
 
             <div className="_topCard" style={{ flex: 1 }}>

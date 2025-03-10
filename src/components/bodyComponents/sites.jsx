@@ -287,8 +287,44 @@ export  const sites =[
 
       
   ], 
-       "partner":"ZICHIRE"
+       "partner":"ZACH"
   },
+
+  {"district":"HURUNGWE",
+   "staticSite":"HURUNGWE - 100619 - RURAL HOSPITAL",
+   "facilities":[{
+      "facility":"Hurungwe Hospital",
+      "type":"static"
+   },
+
+   
+], 
+    "partner":"ZACH"
+},
+
+{"district":"HURUNGWE",
+   "staticSite":"CHIDAMOYO - 100169 - MISSION HOSPITAL",
+   "facilities":[{
+      "facility":"Chidamoyo Mission Hospital",
+      "type":"static"
+   },
+
+   
+], 
+    "partner":"ZACH"
+},
+
+{"district":"HURUNGWE",
+   "staticSite":"MWAMI - 101194 - HOSPITAL",
+   "facilities":[{
+      "facility":"Mwami Hospital",
+      "type":"static"
+   },
+
+   
+], 
+    "partner":"ZACH"
+},
 
     {"district":"MBERENGWA",
       "staticSite":"MUSUME - 101157 - MISSION HOSPITAL",
