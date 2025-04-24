@@ -19,6 +19,26 @@ export const users  = [{
 },
 
 {
+    "username":"tungamirai.mhuka@gmail.com",
+    "userLevel":"super",
+    "domain":"ZICHIRE",
+    "userInfo":{
+        "firstname":"Tungamirai",
+        "lastname":"Mhuka"
+    }
+},
+
+{
+    "username":"rutsitoolbarn@gmail.com",
+    "userLevel":"partner",
+    "domain":"ZACH",
+    "userInfo":{
+        "firstname":"Olbarn",
+        "lastname":"Rutsito"
+    }
+},
+
+{
     "username":"pamtapfuma112@gmail.com",
     "userLevel":"super",
     "domain":"ZICHIRE",
@@ -41,8 +61,8 @@ export const users  = [{
 {
  "username":"tonderaimandi82@gmail.com",
  "userLevel":"site",
- "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
- "District":"HURUNGWE"
+ "staticSite":"TURF - 101719 - COUNCIL CLINIC",
+ "District":"MHONDORO"
 }
 ,
 {
@@ -57,6 +77,14 @@ export const users  = [{
     "userLevel":"site",
     "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
     "District":"HURUNGWE"
+   },
+
+
+   {
+    "username":"ryanmugodzva12@gmail.com",
+    "userLevel":"site",
+    "staticSite":"DONAIN - 100405 - RURAL HEALTH CENTRE",
+    "District":"MHONDORO"
    }
 
 

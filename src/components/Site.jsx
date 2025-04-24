@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 import TableRow from '@mui/material/TableRow';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiCut, BiFolder, BiRecycle, BiSolidAmbulance, BiSun, BiTrash, BiX } from 'react-icons/bi';
 import Facilities from './Facilities';
 import TableComponent from './bodyComponents/Table';
@@ -19,7 +19,13 @@ import { FaHandshakeSimple, FaKitMedical } from 'react-icons/fa6';
 import Header from './Header';
 
 export default function Site({district ,Details,facilities, selectedMonth, selectedYear, staticSites,_staticSite, username, districtSites}){
-     console.log("details",Details)
+     
+  useEffect(()=>{
+
+    window.scrollTo(0, 0);
+  },[])
+  
+  console.log("details",Details)
 
      const [aePage,setAEs] =useState(false)
     const [showFacilities, setShowFacilities] = useState(false)

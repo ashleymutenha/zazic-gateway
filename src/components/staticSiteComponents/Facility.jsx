@@ -24,7 +24,8 @@ export default function Facility({district ,Details,_staticSite, username, _sele
 
     useEffect(()=>{
         console.log("details",Details)
-    })
+        window.scrollTo(0, 0);
+    },[])
 
 
     const [showStaticSite, setStaticSite] = useState(false)

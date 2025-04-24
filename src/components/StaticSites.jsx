@@ -36,9 +36,9 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
   
 
   useEffect(()=>{
-
+    window.scrollTo(0, 0);
     // console.log("staticSites",staticSites)
-  })
+  },[])
   
   
   
@@ -64,8 +64,11 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
     let sites =[]
     for(var facility of facilities){
      if(checkOccurence(facility,'facilityName',sites )==0){
-      sites.push(facility)
-     }
+
+      if(facility['facilityName']!= 'Masikati' && facility['facilityName']!= 'Murambi'){
+        sites.push(facility)
+    }
+    }
     }
     return sites
   }
@@ -132,9 +135,10 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
             if(site['recordingMonth']==selectedMonth && site['year']==selectedYear){
             if(site['Site_Name'] ==staticSite){
               if(checkOccurence(site,'facilityName',_sites)==0){
+                if(site['facilityName']!= 'Masikati' && site['facilityName']!= 'Murambi'){
               _sites.push(site)
               }
-             
+            }
             }
           }
           }
@@ -311,9 +315,11 @@ export default function StaticSites({staticSites, facilities, selectedMonth, sel
         'site':mc['facilityName'],
         'hivNegative':hivNegativeByFacility(mc['facilityName']),
         'hivPreP':mc['total_hiv_negative_linked_to_prep']
-      }
 
+      }
+     if(mc['total_hiv_negative_linked_to_prep']>0){
       array.push(object)
+     }
     }
   return array
 }
@@ -329,8 +335,9 @@ const care =()=>{
       'hivPositiveUC':hivPositiveNCByFacility(mc['facilityName']),
       'hivCare':mc['total_hiv_positive_linked_to_care']
     }
-
-    array.push(object)
+   if(mc['total_hiv_positive_linked_to_care']>0)
+   { array.push(object)
+   }
   }
 return array
 }
@@ -357,7 +364,9 @@ for(let mc of facilities){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_sti_services']
   }
-  array.push(object)  
+  if(mc['total_mcs_referred_for_sti_services']>0)
+ { array.push(object)  
+ }
 }
 return array
 }
@@ -372,7 +381,10 @@ for(let mc of facilities){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_srh_services']
   }
+  if(mc['total_mcs_referred_for_srh_services']>0)
+  {
   array.push(object)  
+  }
 }
 return array
 }
@@ -869,10 +881,10 @@ style={{
                                                         
                                                         <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
                                                         <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
-                                                              <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+                                                              <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to Care</div>
                                                         </div> 
                                                         <div style ={{marginTop:"12px"}}>
-                                                            <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+                                                            <TableCare headings={['District','Site','HIV +ve MCs', 'Linkages to ART']} rowElements={care()}/></div>
                                                             </div>:linkagesShownSection =='other'&& linkagesShownSection!='care' && 
                                                             linkagesShownSection !='prep' && linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
                                                         

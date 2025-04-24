@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiArrowBack, BiBookmark, BiDiamond, BiInjection, BiMale, BiMinusCircle, BiSolidAlbum, BiSolidCompass, BiTrash, BiX } from "react-icons/bi";
 import { BsBack, BsBackspace, BsBoxArrowLeft, BsCollection, BsFillEyeFill, BsHospital, BsMagic, BsSunFill, BsSymmetryVertical } from "react-icons/bs";
 import Dashboard from "./Dashboard";
@@ -29,6 +29,20 @@ import ProgressBar from "./bodyComponents/ProgressBar";
 import { sites } from "./bodyComponents/sites";
 
 export default function Facilities({ staticSites,district, facilities, selectedMonth, selectedYear,_staticSite, username, districtSites }) {
+  
+  useEffect(()=>{
+
+    window.scrollTo(0, 0);
+  //   _facilities =[]
+  //   const facilities = () =>{
+  //     for(var site of facilities){
+  //     if(site['facilityName']!= 'Masikati' && site['facilityName']!= 'Murambi'){
+
+  //     }
+  //   }
+  // }
+  }, [])
+  
   // const [showDashboard, setShowDashboard] = useState(false);
   const [showFacility, setShowFacility] = useState(false);
   const [selectedFacility, setFacility] = useState({})
@@ -519,8 +533,8 @@ return array
               <div style={{ fontWeight: "bold", fontSize: 18, color: "rgb(11, 129, 54)" }}>
                 Facility Reporting Rate
               </div>
-              <div style ={{display:'flex', padding:10}}> 
-              <div style={{ fontSize: 23, color: "black" }}>{facilities.length} /{getSitesByStaticSite().length} </div>
+              <div style ={{display:'flex', marginTop:"10px"}}> 
+              <div style={{ fontSize: 23, color: "black", flex:6 }}>{facilities.length} /{getSitesByStaticSite().length} </div>
 
               <div
     style={{
@@ -540,7 +554,7 @@ return array
 
             </div>
 
-            <div className="_topCard" style={{ flex: 1 }}>
+            {/* <div className="_topCard" style={{ flex: 1 }}>
               <div style={{ padding: "12px", borderBottom: "1px solid lightgrey" }}>
                 <FiAlertTriangle size={30} color="red" />
               </div>
@@ -548,7 +562,7 @@ return array
                 AE(S)
               </div>
               <div style={{ fontSize: 23, color: "black" }}>{aes()}</div>
-            </div>
+            </div> */}
           </div>
 
           <div style={{ margin: '6px', display: 'flex', alignItems: 'center',background:"#ececec", width:'fit-content', paddingRight:"4px" }}>
@@ -577,6 +591,17 @@ return array
           </div></div>
 
           <div style ={{flex:6}}>
+
+          <div className="_topCard" style={{ flex: 1 }}>
+
+              <div style={{ padding: "12px", borderBottom: "1px solid lightgrey" }}>
+                <FiAlertTriangle size={30} color="red" />
+              </div>
+              <div style={{ fontWeight: "bold", fontSize: 18, color: "rgb(11, 129, 54)" }}>
+                AE(S)
+              </div>
+              <div style={{ fontSize: 23, color: "black" }}>{aes()}</div>
+            </div>
 
           <div style ={{display:'flex', margin:5}}>
           
@@ -755,10 +780,10 @@ charttype={"pie"}
                                                                           
                                                                           <div style = {{padding:"8px", background:"rgb(240, 241, 244)", borderRadius:"12px", marginTop:'2rem'}}>
                                                                           <div style ={{padding:6, background:"white", borderRadius:"12px", display:"flex"}}>
-                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to PreP</div>
+                                                                                <BiBookmark size ={45} color ="darkgreen" style ={{flex:1}}/> <div style ={{marginLeft:"23px", flex:8, fontSize:"18px", fontWeight:"bold", color:"rgb(11, 74, 96)"}}>Linkages to Care</div>
                                                                           </div> 
                                                                           <div style ={{marginTop:"12px"}}>
-                                                                              <TableCare headings={['District','Site','HIV +ve MCs','Uncircumcised HIV +ve', 'Linkages to ART']} rowElements={care()}/></div>
+                                                                              <TableCare headings={['District','Site','HIV +ve MCs', 'Linkages to ART']} rowElements={care()}/></div>
                                                                               </div>:linkagesShownSection =='other'&& linkagesShownSection!='care' && 
                                                                               linkagesShownSection !='prep' && linkagesShownSection !='sti' &&  linkagesShownSection !='srh'?
                                                                           

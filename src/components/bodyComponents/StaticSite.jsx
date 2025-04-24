@@ -115,6 +115,8 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
   
       fetchData()
 
+      window.scrollTo(0, 0);
+
 
     },[])
 
@@ -379,11 +381,12 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
         for(var mc of mcs){
             if(mc['year']==selectedYear && mc['recordingMonth']==selectedMonth && mc['District'] ==district && mc['Site_Name'] ==staticSite){
                 if(checkOccurence(mc,'facilityName',sites)==0){
+                  if(mc['facilityName']!= 'Masikati' && mc['facilityName']!= 'Murambi'){
                     sites.push(mc)
                 }
             }
         }
-
+      }
         return sites
       }
 
@@ -468,7 +471,7 @@ export default function StaticSite ({username, district, staticSite,_selectedYea
         'July', 'August', 'September', 'October', 'November', 'December'
       ].map((month) => ({ value: month, label: month }));
     
-      const years = Array.from({ length: 7 }, (_, i) => 2025 + i).map((year) => ({ value: year, label: year }));
+      const years = Array.from({ length: 8 }, (_, i) => 2024 + i).map((year) => ({ value: year, label: year }));
 
 
       const aes = () => {

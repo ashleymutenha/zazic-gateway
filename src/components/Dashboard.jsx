@@ -494,7 +494,7 @@ const checkOccurenceinArray =(array, element)=>{
     'July', 'August', 'September', 'October', 'November', 'December'
   ].map((month) => ({ value: month, label: month }));
 
-  const years = Array.from({ length: 7 }, (_, i) => 2025 + i).map((year) => ({ value: year, label: year }));
+  const years = Array.from({ length: 8 }, (_, i) => 2024 + i).map((year) => ({ value: year, label: year }));
 
   const calculateSum = (mc, type) => {
     // Dynamically calculate based on the type (hivPositive or hivNegative)
@@ -606,8 +606,9 @@ const checkOccurenceinArray =(array, element)=>{
         'hivNegative':hivNegativeByFacility(mc['facilityName']),
         'hivPreP':mc['total_hiv_negative_linked_to_prep']
       }
-
+      if(mc['total_hiv_negative_linked_to_prep']>0){
       array.push(object)
+      }
     }
   return array
 }
@@ -623,8 +624,9 @@ const care =()=>{
       'hivPositiveUC':hivPositiveNCByFacility(mc['facilityName']),
       'hivCare':mc['total_hiv_positive_linked_to_care']
     }
-
+     if (mc['total_hiv_positive_linked_to_care']>0){
     array.push(object)
+     }
   }
 return array
 }
@@ -651,7 +653,10 @@ for(let mc of getUniqueSites()){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_sti_services']
   }
+
+  if (mc['total_mcs_referred_for_sti_services']>0){  
   array.push(object)  
+  }
 }
 return array
 }
@@ -666,7 +671,10 @@ for(let mc of getUniqueSites()){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_srh_services']
   }
-  array.push(object)  
+  if(mc['total_mcs_referred_for_srh_services'])
+  {
+  array.push(object)
+  }  
 }
 return array
 }
@@ -731,7 +739,7 @@ return array
     {showLoginPage ===false?<div>
             
 
-           {getUserInformation().length==0? <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+           {getUserInformation().length==0? <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div
           style={{
             border: "1px solid #ccc",
@@ -767,7 +775,7 @@ return array
         <div>
                                   <Header />
 
-        <div style = {{display:"flex"}}>
+        <div style = {{display:"flex", height:"100%"}}>
           <div style ={{flex:7}}>
           <div style={{ display: 'flex' }}>
             <div className="topCard" style={{ flex: 5 }}>
@@ -904,7 +912,7 @@ return array
           </div>
         </div>
          
-        <div style={{flex:6, padding:"10px", borderLeft:"1px solid lightgrey", height:'3450px'}}>
+        <div style={{flex:6, padding:"10px", borderLeft:"1px solid lightgrey", height:'fit-content'}}>
 
           <Card1 value ={aes()} title={"Adverse Events"} icon = {<FiAlertTriangle size ={30} color ="red"/>} textColor="rgb(11, 74, 96)"/>
           

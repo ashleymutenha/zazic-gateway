@@ -183,6 +183,46 @@ export  const sites =[
     ], 
          "partner":"ZICHIRE"
     },
+
+
+    {"district":"MHONDORO",
+      "staticSite":"TURF - 101719 - COUNCIL CLINIC",
+      "facilities":[{
+         "facility":"Turf Clinic",
+         "type":"static"
+      },
+
+      {
+          "facility":"Twintops",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Gweshe",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Chingondo",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Battlefields RDC",
+          "type":"outreach"
+       },
+
+       {
+          "facility":"Bumbe",
+          "type":"outreach"
+       },
+
+      
+  ], 
+       "partner":"ZICHIRE"
+  },
+
+ 
     {"district":"HURUNGWE",
       "staticSite":"KAROI - 100715 - DISTRICT HOSPITAL",
       "facilities":[{
@@ -325,6 +365,31 @@ export  const sites =[
 ], 
     "partner":"ZACH"
 },
+
+
+{"district":"MHONDORO",
+   "staticSite":"DONAIN - 100405 - RURAL HEALTH CENTRE",
+   "facilities":[{
+      "facility":"Donain",
+      "type":"static"
+   },
+
+   {
+      "facility":"Cuba Clinic",
+      "type":"static"
+   },
+
+
+   {
+      "facility":"Battlefield Clinic",
+      "type":"static"
+   },
+
+   
+], 
+    "partner":"ZICHIRE"
+},
+
 
     {"district":"MBERENGWA",
       "staticSite":"MUSUME - 101157 - MISSION HOSPITAL",
