@@ -31,6 +31,7 @@ import TableSRH from "./bodyComponents/TableSRH";
 
 import { useEffect } from "react";
 import StaticSitesNotSubmitted from "./popupComponents/staticSitesNotSubmitted";
+import { LuBellRing } from "react-icons/lu";
 
 export default function StaticSites({staticSites, facilities, selectedMonth, selectedYear, selectedDistrict,username, districtSites}){
   
@@ -603,6 +604,27 @@ const staticSitesNotSubmitted =()=>{
             </div>
           </div>
 <div style ={{display:"flex", flex:12}}>
+
+   { staticSites.length ==0? <div style={{
+      padding: '16px',
+      border: '1px solid lightgrey',
+      margin: '16px',
+      fontSize: '18px',
+      display: 'flex',
+      alignItems: 'center',
+      borderRadius: '8px',
+      backgroundColor: '#f9f9f9',
+      color: '#555'
+    }}>
+      <div style={{ padding: '8px' }}>
+        <LuBellRing size={36} color="#888" />
+      </div>
+      <div style={{ marginLeft: '12px' }}>
+        No Data to Display
+      </div>
+    </div> :null}
+
+
      {staticSites.map((site)=>(
 
 <div
@@ -722,7 +744,7 @@ style={{
                       
                       >HTS <TbRibbonHealth size ={23}/></div>
 
-                       <div style ={{background:"rgb(54, 75, 64)", padding:'12px', color:'#ffff'}}
+                       <div style ={{background:"rgb(54, 75, 64)", padding:'12px', color:'#ffff', cursor:'pointer'}}
                                   
                                   onClick={()=>{
                                     setShownSection('linkages')

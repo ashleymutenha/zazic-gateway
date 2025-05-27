@@ -18,6 +18,7 @@ import { FaHandshakeSimple, FaKitMedical } from 'react-icons/fa6';
 import Header from '../Header';
 import StaticSite from '../bodyComponents/StaticSite';
 import { useEffect } from 'react';
+import { RiChatFollowUpFill } from 'react-icons/ri';
 
 export default function Facility({district ,Details,_staticSite, username, _selectedMonth, _selectedYear }){
 
@@ -68,6 +69,17 @@ export default function Facility({district ,Details,_staticSite, username, _sele
 
       const hivNegative = [Details['hivNegative15-19'], Details['hivNegative20-24'], 
       Details['hivNegative25-29'], Details['hivNegative30-34'], Details['hivNegative35-39'], Details['hivNegative40-44'], Details['hivNegative45-49'], Details['hivNegative50']]
+
+      const followUp = [
+  Details['fu15-19'],
+  Details['fu20-24'],
+  Details['fu25-29'],
+  Details['fu30-34'],
+  Details['fu35-39'],
+  Details['fu40-44'],
+  Details['fu45-49'],
+  Details['fu50']
+];
       
       const hivTested = ()=>{
         const hivStats = hivNegative.concat(hivPositive)
@@ -169,6 +181,10 @@ export default function Facility({district ,Details,_staticSite, username, _sele
 
                      <TableComponent rowElements={shangring} headings = {ageGroupHeadings}/>
 
+                     <SectionHeader heading ="Client Follow-up"  color ="rgb(240, 241, 244)" textColor ="black"
+             icon2  ={<RiChatFollowUpFill size={30} color="rgb(39, 11, 218)" />}/>
+            <TableComponent rowElements={followUp} headings = {ageGroupHeadings}/>
+
                      </div>
 
 
@@ -186,6 +202,9 @@ export default function Facility({district ,Details,_staticSite, username, _sele
            <SectionHeader heading ="HIV Positive"  color ="rgb(240, 241, 244)" textColor ="black"
             icon  ={<GiRibbon size={30} color="rgb(227, 15, 46)" />} icon2  ={<BiSolidAmbulance size={30} color="rgb(39, 11, 218)" />}/>
             <TableComponent rowElements={hivPositive} headings = {ageGroupHeadings}/>
+
+
+            
 
 
               <div style ={{display:"flex"}}>

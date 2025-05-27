@@ -1,21 +1,36 @@
-export const users  = [{
-    "username":"ashleymutenha@gmail.com",
-    "userLevel":"super",
-    "domain":"ZACH",
-    "userInfo":{
-        "firstname":"Ashley",
-        "lastname":"Mutenha"
-    }
+export const users  = [
+
+{
+    "username":"cshanganya@gmail.com",
+    "userLevel":"site",
+    "staticSite":"MAHUSEKWA - 100829 - HOSPITAL",
+    "District":"MARONDERA"
+    
 },
 
 {
+    "username":"cshanganya2@gmail.com",
+    "userLevel":"site",
+    "staticSite":"MAHUSEKWA - 100829 - HOSPITAL",
+    "District":"MARONDERA"
+    
+},
+
+{
+    "username":"mahusekwavmmc@gmail.com",
+    "userLevel":"site",
+    "staticSite":"MAHUSEKWA - 100829 - HOSPITAL",
+    "District":"MARONDERA"
+    
+},
+
+
+{
     "username":"tanakamutenha518@gmail.com",
-    "userLevel":"partner",
-    "domain":"ZICHIRE",
-    "userInfo":{
-        "firstname":"Tanaka",
-        "lastname":"Mutenha"
-    }
+    "userLevel":"site",
+    "staticSite":"MAHUSEKWA - 100829 - HOSPITAL",
+    "District":"MARONDERA"
+    
 },
 
 {
@@ -61,10 +76,18 @@ export const users  = [{
 {
  "username":"tonderaimandi82@gmail.com",
  "userLevel":"site",
- "staticSite":"TURF - 101719 - COUNCIL CLINIC",
- "District":"MHONDORO"
+ "staticSite":"MARONDERA PROVINCIAL HOSPITAL",
+ "District":"MARONDERA"
 }
 ,
+
+{
+ "username":"turfvmmc@gmail.com",
+ "userLevel":"site",
+ "staticSite":"TURF - 101719 - COUNCIL CLINIC",
+ "District":"MHONDORO"
+},
+
 {
     "username":"madziwachenai1@gmail.com",
     "userLevel":"site",
@@ -85,6 +108,24 @@ export const users  = [{
     "userLevel":"site",
     "staticSite":"DONAIN - 100405 - RURAL HEALTH CENTRE",
     "District":"MHONDORO"
+   },
+
+   {
+    "username":"allymasoha@gmail.com",
+    "userLevel":"site",
+    "staticSite":"MARONDERA PROVINCIAL HOSPITAL",
+    "District":"MARONDERA"
+    
+   },
+
+   {
+    "username":"ashleymutenha@gmail.com",
+    "userLevel":"super",
+   "domain":"ZICHIRE",
+    "userInfo":{
+        "firstname":"Tanaka",
+        "lastname":"Mutenha"
+    }
    }
 
 

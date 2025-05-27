@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {BiBookmark, BiInjection, BiMale, BiMaleSign, BiMapPin, BiMinusCircle, BiSolidDashboard, BiTrash } from 'react-icons/bi';
-import {  BsFillGeoFill, BsGlobe,  BsSun } from 'react-icons/bs';
+import {  BsFileExcel, BsFillGeoFill, BsGlobe,  BsSun } from 'react-icons/bs';
 import Select from 'react-select';
 import './css/dashboard.css';
 import StaticSites from './StaticSites';
@@ -33,6 +33,12 @@ import TableCare from './bodyComponents/TableCare';
 import TableOther from './bodyComponents/TableOther';
 import TableSTI from './bodyComponents/TableSTI';
 import TableSRH from './bodyComponents/TableSRH';
+import { LuBellRing } from 'react-icons/lu';
+import exportFromJSON from 'export-from-json';
+// import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx-js-style';
+
 
 
 
@@ -60,6 +66,11 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
   // const login = useGoogleLogin({
   //   onSuccess: tokenResponse => console.log(tokenResponse),
   // });
+
+
+
+
+
  
 
   useEffect(() => {
@@ -75,11 +86,22 @@ export default function Dashboard({ _selectedMonth, _selectedYear,username }) {
 
         const rawData = await response.text();
         const cleanData = JSON.parse(rawData.replace(/\bNaN\b/g, 'null'));
+        const cleanData1 = surgicalDisposableTotal(cleanData)
 
-        console.log("data",cleanData)
+        const cleanData2 = surgicalReusableTotal(cleanData1)
+        const cleanData3 = shangringTotal(cleanData2)
+        const cleanData4 = hivNegativeTotal(cleanData3)
+        const cleanData5 = hivPositiveTotal(cleanData4)
 
-       
-        setMCs(cleanData);
+        const cleanData6 = followUpTotal(cleanData5)
+
+        const cleanData7 = assignFacilityType(cleanData6)
+
+        const cleanData8 = hivUntestedAgeGroups(cleanData7)
+        const cleanData9 = hivUntestedTotal(cleanData8)
+        console.log("data",cleanData9)
+
+        setMCs(cleanData9)
 
         if (_selectedMonth != undefined && _selectedYear != undefined) {
           setSelectedMonth(_selectedMonth);
@@ -130,6 +152,208 @@ const getUserInformation =()=>{
   }
   return userInfo
 }
+
+
+const getDistrictFacility = (district) => {
+  let array = [];
+  for (var site of sites) {
+    if (site['district'] == district) {
+      for (var facility of site.facilities) {
+        array.push(facility);
+      }
+    }
+  }
+  return array; // Moved outside the loop
+};
+
+const getFacilityType = (facility, district) => {
+  let facilityType = "";
+  for (var _facility of getDistrictFacility(district)) {
+    if (_facility['facility'] == facility) {
+      facilityType = _facility['type'];
+      break; // Exit loop early if match found
+    }
+  }
+  return facilityType;
+};
+
+const assignFacilityType = (data) => {
+  return data.map(mc => ({
+    ...mc,
+    facilityType: getFacilityType(mc['facilityName'], mc['District'])
+  }));
+};
+
+
+const surgicalDisposableTotal = (data) => {
+  let array = [];
+  for (var mc of data) {
+    let surgicalTotal =
+      (mc['sgDisposable15-19'] || 0) +
+      (mc['sgDisposable20-24'] || 0) +
+      (mc['sgDisposable25-29'] || 0) +
+      (mc['sgDisposable30-34'] || 0) +
+      (mc['sgDisposable35-39'] || 0) +
+      (mc['sgDisposable40-44'] || 0) +
+      (mc['sgDisposable45-49'] || 0) +
+      (mc['sgDisposable50'] || 0);
+
+    mc['surgicalDisposableTotal'] = surgicalTotal;
+    array.push(mc);
+  }
+  return array;
+};
+
+
+const surgicalReusableTotal = (data) => {
+  let array = [];
+  for (var mc of data) {
+    let surgicalTotal =
+      (mc['sgReusable15-19'] || 0) +
+      (mc['sgReusable20-24'] || 0) +
+      (mc['sgReusable25-29'] || 0) +
+      (mc['sgReusable30-34'] || 0) +
+      (mc['sgReusable35-39'] || 0) +
+      (mc['sgReusable40-44'] || 0) +
+      (mc['sgReusable45-49'] || 0) +
+      (mc['sgReusable50'] || 0);
+
+    mc['surgicalReusableTotal'] = surgicalTotal;
+    array.push(mc);
+  }
+  return array;
+};
+
+
+const followUpTotal = (data) => {
+  return data.map((entry) => {
+    const ageGroups = [
+      'fu15-19',
+      'fu20-24',
+      'fu25-29',
+      'fu30-34',
+      'fu35-39',
+      'fu40-44',
+      'fu45-49',
+      'fu50'
+    ];
+
+    entry['followUpTotal'] = ageGroups.reduce((sum, key) => sum + (entry[key] || 0), 0);
+    return entry;
+  });
+};
+
+
+const shangringTotal = (data) => {
+  let array = [];
+  for (var mc of data) {
+    let total =
+      mc['shangring15-19']  +
+      mc['shangring20-24']  +
+      mc['shangring25-29'] +
+      mc['shangring30-34']  +
+      mc['shangring35-39']+
+      mc['shangring40-44'] +
+      mc['shangring45-49'] +
+      mc['shangring50'];
+
+    mc['shangringTotal'] = total;
+
+    array.push(mc);
+  }
+  return array;
+};
+
+
+const hivUntestedAgeGroups = (data) => {
+  let array = [];
+
+  for (let mc of data) {
+    // Define age groups from 15-19 to 45-49 (inclusive)
+    const ageGroups = [
+      '15-19', '20-24', '25-29',
+      '30-34', '35-39', '40-44', '45-49', '50'
+    ];
+
+    for (let group of ageGroups) {
+      const totalKey = `mc${group}`;
+      const negKey = `hivNegative${group}`;
+      const posKey = `hivPositive${group}`;
+      const untestedKey = `hivUntested${group}`;
+
+      mc[untestedKey] = (mc[totalKey] || 0) -((mc[negKey] || 0) + (mc[posKey] || 0));
+    }
+
+    array.push(mc);
+  }
+
+  return array;
+};
+
+
+
+
+const hivUntestedTotal = (data) => {
+  let array = [];
+  for (let mc of data) {
+    let total =
+      (mc['hivUntested15-19'] || 0) +
+      (mc['hivUntested20-24'] || 0) +
+      (mc['hivUntested25-29'] || 0) +
+      (mc['hivUntested30-34'] || 0) +
+      (mc['hivUntested35-39'] || 0) +
+      (mc['hivUntested40-44'] || 0) +
+      (mc['hivUntested45-49'] || 0) +
+      (mc['hivUntested50'] || 0);
+
+    mc['hivUntestedTotal'] = total;
+
+    array.push(mc);
+  }
+  return array;
+};
+
+
+const hivNegativeTotal = (data) => {
+  let array = [];
+  for (var mc of data) {
+    let total =
+      mc['hivNegative15-19']  +
+      mc['hivNegative20-24']  +
+      mc['hivNegative25-29'] +
+      mc['hivNegative30-34']  +
+      mc['hivNegative35-39']+
+      mc['hivNegative40-44'] +
+      mc['hivNegative45-49'] +
+      mc['hivNegative50'];
+
+    mc['hivNegativeTotal'] = total;
+
+    array.push(mc);
+  }
+  return array;
+};
+
+
+const hivPositiveTotal = (data) => {
+  let array = [];
+  for (var mc of data) {
+    let total =
+      mc['hivPositive15-19']  +
+      mc['hivPositive20-24']  +
+      mc['hivPositive25-29'] +
+      mc['hivPositive30-34']  +
+      mc['hivPositive35-39']+
+      mc['hivPositive40-44'] +
+      mc['hivPositive45-49'] +
+      mc['hivPositive50'];
+
+    mc['hivPositiveTotal'] = total;
+
+    array.push(mc);
+  }
+  return array;
+};
 
 
 const loggedUser = () =>{
@@ -635,8 +859,9 @@ return array
 const otherServices =()=>{
 let array =[]
 for(let mc of getUniqueSites()){
-
+  
   mc.otherReferrals.map((referral)=>{
+    if(referral['ReferrelRecordingMonth'] ==selectedMonth && referral['ReferrelRecordingYear'] ==selectedYear)
     array.push(referral)
   })
 }
@@ -653,10 +878,11 @@ for(let mc of getUniqueSites()){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_sti_services']
   }
-
+  if(mc['recordingMonth'] ==selectedMonth && mc['year'] ==selectedYear){
   if (mc['total_mcs_referred_for_sti_services']>0){  
   array.push(object)  
   }
+}
 }
 return array
 }
@@ -671,10 +897,14 @@ for(let mc of getUniqueSites()){
     "site":mc['facilityName'],
     "stiReferrals":mc['total_mcs_referred_for_srh_services']
   }
-  if(mc['total_mcs_referred_for_srh_services'])
+
+  if(mc['recordingMonth'] ==selectedMonth && mc['year'] ==selectedYear){
+
+  if(mc['total_mcs_referred_for_srh_services']>0)
   {
   array.push(object)
   }  
+}
 }
 return array
 }
@@ -730,9 +960,286 @@ return array
           return sum
         }
 
- 
 
 
+ const getAES = () => {
+  let aes = [];
+
+  for (const mc of getMCsinTimePeriod()) {
+    
+    if (Array.isArray(mc.matchingAES) && mc.matchingAES.length > 0) {
+      aes.push(...mc.matchingAES);
+    }
+  
+}
+
+  return aes;
+};
+
+
+
+ const getMCsinTimePeriod =()=>{
+
+  let data =[]
+
+  for(var mc of mcs){
+    if(mc['year'] ==selectedYear && mc['recordingMonth']==selectedMonth){
+
+      data.push(mc)
+    }
+  }
+  return data
+ }
+
+
+
+
+const handleExportClick = () => {
+  const data1 = getMCsinTimePeriod();
+
+  const data2 = [
+    { District: 'Harare', Target: 150 },
+    { District: 'Bulawayo', Target: 100 },
+  ];
+
+  const ageGroups = ['15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50'];
+
+  const totals = data1.reduce((acc, row) => {
+    const key = row.District;
+    acc[key] = (acc[key] || 0) + row.totalMCs;
+    return acc;
+  }, {});
+  const totalPerDistrict = Object.entries(totals)
+    .map(([District, total]) => [District, total])
+    .sort((a, b) => a[0].localeCompare(b[0]));
+
+  const districtTotalRow = ['Total', totalPerDistrict.reduce((sum, r) => sum + r[1], 0)];
+
+  const modifiedData1 = data1.map(row => [
+    row.District,
+    row.facilityName,
+    row.facilityType,
+    row.totalMCs
+  ]).sort((a, b) => a[0].localeCompare(b[0]));
+
+  const facilityTotalRow = ['Total', '','', modifiedData1.reduce((sum, r) => sum + r[3], 0)];
+
+  const buildMethodSection = (prefix, totalKey) => {
+    const headers = ['District', 'Facility', ...ageGroups.map(age => `${age} yrs`), 'Total'];
+    const rows = data1.map(row => [
+      row.District,
+      row.facilityName,
+      ...ageGroups.map(age => row[`${prefix}${age}`]),
+      row[totalKey]
+    ]);
+    rows.sort((a, b) => a[0].localeCompare(b[0]));
+    const totalRow = [
+      'Total', '',
+      ...ageGroups.map((age, i) => rows.reduce((sum, r) => sum + (r[2 + i] || 0), 0)),
+      rows.reduce((sum, r) => sum + r[r.length - 1], 0)
+    ];
+    return { headers, rows, totalRow };
+  };
+
+  const surgicalDisposable = buildMethodSection('sgDisposable', 'surgicalDisposableTotal');
+  const surgicalReusable = buildMethodSection('sgReusable', 'surgicalReusableTotal');
+  const shangring = buildMethodSection('shangring', 'shangringTotal');
+  const hivNegative = buildMethodSection('hivNegative', 'hivNegativeTotal');
+  const hivPositive = buildMethodSection('hivPositive', 'hivPositiveTotal');
+  const followUp = buildMethodSection('fu', 'followUpTotal');
+  const hivUntested = buildMethodSection('hivUntested', 'hivUntestedTotal')
+
+  // Build Linkages Section
+  const linkegeHeaders = [
+    'District',
+    'Facility',
+    'Total Linkages to PreP',
+    'Total Linkages to Care',
+    'Total Referral to SRH',
+    'Total Referral to STI',
+    'Total'
+  ];
+
+  const aeHeaders =['District', 'Facility','Date of Reporting', 'VMMC Number', 'Client Age',
+     'AE Type', 'MC Method', 'AE Severity', 'Circumcising Cadre']
+
+      const aeRows = getAES().map(row => [
+      row.District,
+      row.AERecordingSite,
+      row.date_ae_identified,
+      row.vmmc_number,
+      row.client_age,
+      row.ae_type_code,
+      row.mcMethod,
+      row.ae_classification,
+      row.circumcising_cadre
+    ]);
+
+ const linkageRows = data1.map(row => {
+  const toPrep = row.total_hiv_negative_linked_to_prep || 0;
+  const toCare = row.total_hiv_positive_linked_to_care || 0;
+  const toSRH = row.total_mcs_referred_for_srh_services || 0;
+  const toSTI = row.total_mcs_referred_for_sti_services || 0;
+
+  const total = toPrep + toCare + toSRH + toSTI;
+
+  return [
+    row.District,
+    row.facilityName,
+    toPrep,
+    toCare,
+    toSRH,
+    toSTI,
+    total
+  ];
+}).sort((a, b) => a[0].localeCompare(b[0]));
+
+  const linkageTotalRow = [
+    'Total',
+    '',
+    linkageRows.reduce((sum, r) => sum + (r[2] || 0), 0),
+    linkageRows.reduce((sum, r) => sum + (r[3] || 0), 0),
+    linkageRows.reduce((sum, r) => sum + (r[4] || 0), 0),
+    linkageRows.reduce((sum, r) => sum + (r[5] || 0), 0),
+    linkageRows.reduce((sum, r) => sum + (r[6] || 0), 0)
+  ];
+
+  const combinedSheetData = [
+    ['VMMC DATA COP 24'],
+    [],
+    [],
+    ['Total MCs Per District'],
+    ['District', 'Total MCs'],
+    ...totalPerDistrict,
+    districtTotalRow,
+    [],
+    ['Facility-Level MCs'],
+    ['District', 'Facility','Facility Type', 'Total MCs'],
+    ...modifiedData1,
+    facilityTotalRow,
+    [],
+    ['MC Method -> Surgical Disposable'],
+    surgicalDisposable.headers,
+    ...surgicalDisposable.rows,
+    surgicalDisposable.totalRow,
+    [],
+    ['MC Method -> Surgical Reusable'],
+    surgicalReusable.headers,
+    ...surgicalReusable.rows,
+    surgicalReusable.totalRow,
+    [],
+    ['MC Method -> ShangRing'],
+    shangring.headers,
+    ...shangring.rows,
+    shangring.totalRow,
+    [],
+    ['MCs -> Follow Up'],
+    followUp.headers,
+    ...followUp.rows,
+    followUp.totalRow,
+    [],
+    ['HTS -> HIV Negative'],
+    hivNegative.headers,
+    ...hivNegative.rows,
+    hivNegative.totalRow,
+    [],
+    ['HTS -> HIV Positive'],
+    hivPositive.headers,
+    ...hivPositive.rows,
+    hivPositive.totalRow,
+    [],
+     ['HTS -> HIV Untested'],
+    hivUntested.headers,
+    ...hivUntested.rows,
+    hivUntested.totalRow,
+    [],
+    ['Linkages & Referrals'],
+    linkegeHeaders,
+    ...linkageRows,
+    linkageTotalRow,
+    [],
+    ['Adverse Events'],
+    aeHeaders,
+    ...aeRows,
+  ];
+
+  // Shift all data right by 1 column (leave column A empty)
+  const shiftedCombinedSheetData = combinedSheetData.map(row => ['', ...row]);
+
+  const ws1 = XLSX.utils.aoa_to_sheet(shiftedCombinedSheetData);
+
+  ws1['!pane'] = {
+  xSplit: 3,
+  ySplit: 0,
+  topLeftCell: 'D1',
+  activePane: 'topRight',
+  state: 'frozen'
+};
+
+  ws1['!cols'] = [
+    { wch: 2 },   // Column A (empty column)
+    { wch: 36 },  // Column B (District)
+    { wch: 22 },  // Column C (Facility)
+    { wch: 18 },  // Column D
+    { wch: 18 },  // Column E
+    { wch: 21 },  // Column F
+    { wch: 21 },  // Column G
+    { wch: 10 },  // Column H
+    { wch: 10 },  // Column I
+    { wch: 16 },  // Column J
+    { wch: 10 },  // Column K
+    { wch: 10 },  // Column L
+    { wch: 10 },  // Column M
+  ];
+
+  // Styling
+  const boldStyle = { font: { bold: true }, fill: { patternType: 'solid', fgColor: { rgb: 'CDE6F9' } } };
+  const sectionHeaderStyle = {
+    font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 13 },
+    fill: { patternType: 'solid', fgColor: { rgb: '4E6E81' } }
+  };
+  const greyBoldStyle = {
+    font: { bold: true },
+    fill: { patternType: 'solid', fgColor: { rgb: 'D1E7DD' } }
+  };
+  const titleStyle = {
+    font: { bold: true, color: { rgb: '000000' }, sz: 16 },
+    fill: { patternType: 'solid', fgColor: { rgb: 'C9DBE5' } }
+  };
+
+  for (let i = 0; i < shiftedCombinedSheetData.length; i++) {
+    const row = shiftedCombinedSheetData[i];
+
+    if (row[1] === 'VMMC DATA COP 24') {
+      const cellRef = `B${i + 1}`;
+      if (ws1[cellRef]) ws1[cellRef].s = titleStyle;
+    } else if (row.length === 2 && typeof row[1] === 'string' && row[1] !== '') {
+      const cellRef = `B${i + 1}`;
+      if (ws1[cellRef]) ws1[cellRef].s = sectionHeaderStyle;
+    } else if (row[1] === 'Total') {
+      const colLetters = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+      colLetters.forEach(col => {
+        const cell = ws1[`${col}${i + 1}`];
+        if (cell) cell.s = greyBoldStyle;
+      });
+    } else if (row[1] === 'District') {
+      const colLetters = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+      colLetters.forEach(col => {
+        const cell = ws1[`${col}${i + 1}`];
+        if (cell) cell.s = boldStyle;
+      });
+    }
+  }
+
+  const ws2 = XLSX.utils.json_to_sheet(data2);
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws1, selectedMonth +' '+ selectedYear);
+  // XLSX.utils.book_append_sheet(wb, ws2, 'MCs Target');
+
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array', cellStyles: true });
+  saveAs(new Blob([wbout], { type: 'application/octet-stream' }),  userDomain +'  '+ 'Programmtic Report.xlsx');
+};
 
   return (
     <div>
@@ -910,9 +1417,44 @@ return array
               </div>
             ))}
           </div>
+
+
+          {getDistricts().length === 0 && (
+  <div style={{
+    padding: '16px',
+    border: '1px solid lightgrey',
+    margin: '16px',
+    fontSize: '18px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '8px',
+    backgroundColor: '#f9f9f9',
+    color: '#555'
+  }}>
+    <div style={{ padding: '8px' }}>
+      <LuBellRing size={36} color="#888" />
+    </div>
+    <div style={{ marginLeft: '12px' }}>
+      No Data to Display
+    </div>
+  </div>
+)}
+
+
         </div>
          
         <div style={{flex:6, padding:"10px", borderLeft:"1px solid lightgrey", height:'fit-content'}}>
+
+          <div style ={{background:"lightgrey", padding:"10px", borderRadius:"12px", width:"fit-content", cursor:'pointer'}}
+
+  onClick={() => {
+ 
+
+     handleExportClick()
+  }}
+
+          
+          >Export to Excel <BsFileExcel size ={20} /></div>
 
           <Card1 value ={aes()} title={"Adverse Events"} icon = {<FiAlertTriangle size ={30} color ="red"/>} textColor="rgb(11, 74, 96)"/>
           

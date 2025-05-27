@@ -32,7 +32,28 @@ export default function TableSTI({headings, rowElements}){
 
     return (
         <div style ={{}}>
-        <TableContainer component={Paper}>
+           {rowElements.length === 0 ?
+                                          <div style={{
+                                            padding: '16px',
+                                            border: '1px solid lightgrey',
+                                            margin: '16px',
+                                            fontSize: '18px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            borderRadius: '8px',
+                                            backgroundColor: '#f9f9f9',
+                                            color: '#555'
+                                          }}>
+                                            <div style={{ padding: '8px' }}>
+                                              <LuBellRing size={36} color="#888" />
+                                            </div>
+                                            <div style={{ marginLeft: '12px' }}>
+                                              No Data to Display
+                                            </div>
+                                          </div>:null
+                                        }
+
+       {rowElements.length >0 ? <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -51,7 +72,7 @@ export default function TableSTI({headings, rowElements}){
               </StyledTableRow>))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>:null}
       </div>
     )
 
